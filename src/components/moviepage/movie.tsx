@@ -3,6 +3,7 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import Search from './search';
 import React, { useState, useMemo, useEffect } from 'react';
 import { Pagination } from "react-bootstrap";
+import { WindowStack } from "react-bootstrap-icons";
 
 interface MovieViewPageProps {
     user: User;
@@ -25,6 +26,7 @@ const MovieViewPage: React.FC<MovieViewPageProps> = ({
     movielists,
     onLogout,
 }) => {
+    
     const itemsPerPage = 6;
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedGenre, setSelectedGenre] = useState('');
@@ -100,7 +102,8 @@ const MovieViewPage: React.FC<MovieViewPageProps> = ({
                 {currentItems.length > 0 ? (
                     currentItems.map((movie, index) => (
                         <div className="col-md-4 mb-4" key={movie._id}>
-                            <div className="card h-100 shadow-sm">
+                            <div className="card h-50 shadow-sm"
+                            style={{width:'400px'}}>
                                 <a
                                     href={movie.targetUrl}
                                     target="_blank"

@@ -7,10 +7,10 @@ import Lists from './components/moviepage/movie-list';
 import { User, Movie } from './components/user/types';
 import AdminPanel from './components/adminpanel/admin';
 
-// const LOCAL_STORAGE_KEY = 'masterMovieList';
+const LOCAL_STORAGE_KEY = 'masterMovieList';
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
-    return localStorage.getItem('isLoggedIn') === 'true';
+    return localStorage.getItem('isLoggedIn') === 'true';                          
   });
   const [currentUser, setCurrentUser] = useState<User | null>(() => {
     const saved = localStorage.getItem('currentUser');
@@ -24,7 +24,6 @@ function App() {
     }
     return Lists.map((m) => ({ ...m, isFavorite: false }));
   });
-
   useEffect(() => {
     const favoriteIds = movies.filter((m) => m.isFavorite).map((m) => m._id);
     localStorage.setItem('favoriteMovies', JSON.stringify(favoriteIds));
@@ -64,14 +63,18 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Navigate to="/login" />} />
+        <Route path="/" element={isAuthenticated ? <Navigate to="/movie" /> : <Navigate to="/login" />} />
         <Route
           path="/login"
           element={
-            <LoginPage
-              setIsAuthenticated={setIsAuthenticated}
-              setUser={setCurrentUser}
-            />
+            isAuthenticated ? (
+              <Navigate to="/movie" replace />
+            ) : (
+              <LoginPage
+                setIsAuthenticated={setIsAuthenticated}
+                setUser={setCurrentUser}
+              />
+            )
           }
         />
         <Route

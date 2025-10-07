@@ -7,22 +7,20 @@ interface LoginPageProps {
   setIsAuthenticated: (isAuthenticated: boolean) => void;
   setUser: (user: User) => void;
 }
-
 const LoginPage: React.FC<LoginPageProps> = ({ setIsAuthenticated, setUser }) => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
   const [showPassword, setShowPassword] = useState(false);
+
+  const navigate = useNavigate();
   const handleTogglePassword = () => {
     setShowPassword(!showPassword);
   };
 
-  const navigate = useNavigate();
-
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
   };
-
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
   };
@@ -42,7 +40,6 @@ const LoginPage: React.FC<LoginPageProps> = ({ setIsAuthenticated, setUser }) =>
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!validate()) return;
@@ -50,7 +47,6 @@ const LoginPage: React.FC<LoginPageProps> = ({ setIsAuthenticated, setUser }) =>
     const foundUser = usersData.find(
       (u: any) => u.email === email && u.password === password
     );
-
     if (foundUser) {
       localStorage.setItem('isLoggedIn', 'true');
       localStorage.setItem('currentUser', JSON.stringify(foundUser));
@@ -61,16 +57,11 @@ const LoginPage: React.FC<LoginPageProps> = ({ setIsAuthenticated, setUser }) =>
       } else {
         navigate('/movie');
       }
-    } else {
-      setErrors({ password: "Invalid email or password" });
     }
-    // From your login component
     if (foundUser) {
       localStorage.setItem('isLoggedIn', 'true');
       localStorage.setItem('currentUser', JSON.stringify(foundUser));
-      // ... rest of your login logic
     }
-
   };
   return (
     <div className="container d-flex justify-content-center align-items-center vh-100">
@@ -94,23 +85,23 @@ const LoginPage: React.FC<LoginPageProps> = ({ setIsAuthenticated, setUser }) =>
           </div>
           <div className='mb-3 mt-3 mx-5 text-start'>
             <label>Password <span className="text-danger">*</span></label>
-             <div className="input-group">
-            <input
-              className={`form-control ${errors.password ? 'is-invalid' : ''}`}
-              type={showPassword ? 'text' : 'password'}
-              value={password}
-              onChange={handlePasswordChange}
-            />
-            <button
-              className="btn btn-outline-secondary"
-              type="button"
-              onClick={handleTogglePassword}
-            >
-
-           <i className={`bi ${showPassword ? 'bi-eye' : 'bi-eye-slash'}`}></i>
-            </button>
+            <div className="input-group">
+              <input
+                className={`form-control ${errors.password ? 'is-invalid' : ''}`}
+                type=
+                {showPassword ? 'text' : 'password'}
+                value={password}
+                onChange={handlePasswordChange}
+              />
+              <button
+                className="btn btn-outline-secondary"
+                type="button"
+                onClick={handleTogglePassword}
+              >
+                <i className={`bi ${showPassword ? 'bi-eye' : 'bi-eye-slash'}`}></i>
+              </button>
+              {errors.password && <div className="invalid-feedback">{errors.password}</div>}
             </div>
-            {errors.password && <div className="invalid-feedback">{errors.password}</div>}
           </div>
           <div className='text-center'>
             <button type="submit" className="btn btn-primary w-40 mt-3">Login</button>
@@ -120,5 +111,5 @@ const LoginPage: React.FC<LoginPageProps> = ({ setIsAuthenticated, setUser }) =>
     </div>
   );
 };
-
 export default LoginPage;
+
