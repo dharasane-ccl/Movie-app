@@ -235,7 +235,6 @@ const AdminPanel: React.FC = () => {
                     )}
                 </Col>
             </Row>
-            
             {user && (
                 <MovieTable
                     movies={filteredMovies}
