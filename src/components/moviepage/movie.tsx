@@ -1,9 +1,9 @@
+import React, { useState, useMemo, useEffect } from 'react';
+import { Pagination, Card, Row, Col } from "react-bootstrap";
 import { User, Movie } from "../user/types";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import Search from './search';
-import React, { useState, useMemo, useEffect } from 'react';
-import { Pagination } from "react-bootstrap";
-import { WindowStack } from "react-bootstrap-icons";
+
 
 interface MovieViewPageProps {
     user: User;
@@ -11,7 +11,8 @@ interface MovieViewPageProps {
     favoriteMovies: Movie[];
     onToggleFavorite: (id: string) => void;
     onLogout: () => void;
-
+    isFavoritesPage: boolean; 
+    pageTitle:string
 }
 
 const getDisplayName = (user: User | null): string => {
@@ -25,8 +26,11 @@ const MovieViewPage: React.FC<MovieViewPageProps> = ({
     onToggleFavorite,
     movielists,
     onLogout,
+    isFavoritesPage,
+    pageTitle,
 }) => {
-    
+     const heading = pageTitle || 'Default Page Heading'; 
+
     const itemsPerPage = 6;
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedGenre, setSelectedGenre] = useState('');
@@ -51,14 +55,13 @@ const MovieViewPage: React.FC<MovieViewPageProps> = ({
     }, [movielists, searchTerm, selectedGenre]);
 
     useEffect(() => {
-        setCurrentPage(1);
-    }, [filteredMovies]);
+        setCurrentPage(6);
+    }, [searchTerm,selectedGenre]);
 
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentItems = filteredMovies.slice(indexOfFirstItem, indexOfLastItem);
 
-    
     const totalPages = Math.ceil(filteredMovies.length / itemsPerPage);
 
     const handlePageChange = (pageNumber: number) => {
@@ -69,7 +72,7 @@ const MovieViewPage: React.FC<MovieViewPageProps> = ({
         <div className="container my-3">
             {user && (
                 <div
-                    className="position-fixed top-5 end-0 m-2 mx-5 rounded-circle bg-success text-white d-flex justify-content-center align-items-center"
+                    className="position-fixed top-0 end-0 m-2 mx-5 rounded-circle bg-success text-white d-flex justify-content-center align-items-center"
                     style={{ width: "40px", height: "40px", fontSize: "18px", cursor: "pointer", zIndex: 1050 }}
                     onClick={() => setShowUserInfo(!showUserInfo)}
                 >
@@ -91,63 +94,73 @@ const MovieViewPage: React.FC<MovieViewPageProps> = ({
                     )}
                 </div>
             )}
-            <h1>Movies</h1>
+             <h1>{heading}</h1>
+
+              
             <Search
                 searchTerm={searchTerm}
                 setSearchTerm={setSearchTerm}
                 selectedGenre={selectedGenre}
                 setSelectedGenre={setSelectedGenre}
             />
-            <div className="row mt-3">
+               
+            <Row className="mt-3">
                 {currentItems.length > 0 ? (
-                    currentItems.map((movie, index) => (
-                        <div className="col-md-4 mb-4" key={movie._id}>
-                            <div className="card h-50 shadow-sm"
-                            style={{width:'400px'}}>
+                    currentItems.map((movie) => (
+                        <Col xs={12} md={6} lg={4} className="mb-4" key={movie._id}>
+                            <Card className="h-100 shadow-sm d-flex flex-column">
                                 <a
                                     href={movie.targetUrl}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                 >
-                                    <img
+                                    <Card.Img
+                                        variant="top"
                                         src={movie.image}
-                                        className="card-img-top"
                                         alt={movie.title}
                                         style={{ height: '200px', objectFit: 'cover' }}
                                     />
                                 </a>
-                                <div className="card-body position-relative">
+                              
+                                <Card.Body className="d-flex flex-column position-relative">
                                     <h5 className="card-title">{movie.title}</h5>
                                     <h6 className="card-subtitle mb-2 text-muted">{movie.genre}</h6>
                                     <h6 className="card-year">{movie.year}</h6>
-                                    <p className="card-text">{movie.description}</p>
-                                    <button
-                                        className="position-absolute top-0 end-0 m-2"
-                                        onClick={() => onToggleFavorite(movie._id)}
-                                        style={{
-                                            background: 'none',
-                                            border: 'none',
-                                            cursor: 'pointer',
-                                            fontSize: '1.5rem',
-                                            color: movie.isFavorite ? 'red' : 'black',
-                                        }}
-                                    >
-                                        {movie.isFavorite ? (
-                                            <i className="bi bi-heart-fill" />
-                                        ) : (
-                                            <i className="bi bi-heart" />
-                                        )}
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
+                                    <p className="card-text text-truncate flex-grow-1">{movie.description}</p>
+                    
+                                        <button
+                                            className="position-absolute top-0 end-0 m-2"
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                e.stopPropagation();
+                                                onToggleFavorite(movie._id)
+                                            }
+                                            }
+                                            style={{
+                                                background: 'none',
+                                                border: 'none',
+                                                cursor: 'pointer',
+                                                fontSize: '1.5rem',
+                                                color: movie.isFavorite ? 'red' : 'black',
+                                            }}
+                                        >
+                                            {movie.isFavorite ? (
+                                                <i className="bi bi-heart-fill" />
+                                            ) : (
+                                                <i className="bi bi-heart" />
+                                            )}
+                                        </button>
+
+                                </Card.Body>
+                            </Card>
+                        </Col>
                     ))
                 ) : (
-                    <div className="col-12 text-center mt-4">
+                    <Col xs={12} className="text-center mt-4">
                         <p>No movies found matching your search and filter criteria.</p>
-                    </div>
+                    </Col>
                 )}
-            </div>
+            </Row>
             <div className="d-flex justify-content-center mt-3">
                 <Pagination>
                     <Pagination.Prev onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} />
@@ -162,4 +175,5 @@ const MovieViewPage: React.FC<MovieViewPageProps> = ({
         </div>
     );
 };
+
 export default MovieViewPage;

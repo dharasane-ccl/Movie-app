@@ -24,27 +24,27 @@ const AddEditMovieModal: React.FC<AddEditMovieModalProps> = ({
     onInputChange,
     allGenres,
 }) => {
-    // This handler will prevent the default form submission and call the onSave prop
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
+        if(formErrors){
+            console.log("validate")
+            return;
+        }
         onSave();
     };
-
     return (
         <Modal show={show} onHide={onClose}>
             <Modal.Header closeButton>
                 <Modal.Title>{isEditing ? 'Edit Movie' : 'Add Movie'}</Modal.Title>
             </Modal.Header>
-            {/* Wrap your form controls in a <Form> tag with an onSubmit handler */}
             <Form onSubmit={handleSubmit}>
                 <Modal.Body>
                     <Form.Group className="mb-3" controlId="title">
-                        <Form.Label>Title <span>*</span></Form.Label>
+                        <Form.Label>Title <span className='text-danger'>*</span></Form.Label>
 
                         <Form.Control
                             type="text"
                             name="title"
-                            
                             value={movie.title}
                             onChange={onInputChange}
                             isInvalid={!!formErrors?.title}
@@ -53,7 +53,7 @@ const AddEditMovieModal: React.FC<AddEditMovieModalProps> = ({
                         <Form.Control.Feedback type="invalid">{formErrors?.title}</Form.Control.Feedback>
                     </Form.Group>
                     <Form.Group className="mb-3" controlId="description">
-                        <Form.Label>Description <span>*</span></Form.Label>
+                        <Form.Label>Description <span className='text-danger'>*</span></Form.Label>
                         <Form.Control
                             as="textarea"
                             rows={3}
@@ -66,7 +66,7 @@ const AddEditMovieModal: React.FC<AddEditMovieModalProps> = ({
                     </Form.Group>
 
                     <Form.Group className="mb-3" controlId="genre">
-                        <Form.Label>Genre <span>*</span></Form.Label>
+                        <Form.Label>Genre <span className='text-danger'>*</span></Form.Label>
                         <Form.Select
                             name="genre"
                             value={movie.genre}
@@ -80,11 +80,8 @@ const AddEditMovieModal: React.FC<AddEditMovieModalProps> = ({
                         </Form.Select>
                         <Form.Control.Feedback type="invalid">{formErrors?.genre}</Form.Control.Feedback>
                     </Form.Group>
-
-
-
                     <Form.Group className="mb-3" controlId="year">
-                        <Form.Label>Year <span>*</span></Form.Label>
+                        <Form.Label>Year <span className='text-danger'>*</span></Form.Label>
                         <Form.Control
                             type="number"
                             name="year"
