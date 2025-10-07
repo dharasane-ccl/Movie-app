@@ -15,7 +15,7 @@ const DeleteConfirmModal: React.FC<DeleteConfirmModalProps> = ({ show, onClose, 
                 <Modal.Title>Confirm Deletion</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                Are you sure you want to delete the movie: **{movieTitle}**?
+                Are you sure you want to delete this movie.
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="secondary" onClick={onClose}>Cancel</Button>

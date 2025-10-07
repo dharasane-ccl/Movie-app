@@ -36,7 +36,7 @@ const MovieTable: React.FC<MovieTableProps> = ({ movies, onEdit, onView, onDelet
             <th>Year</th>
             <th>Genre</th>
             <th>Movie Poster</th>
-            <th>Movie URL</th>
+            <th>Movie Url</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -45,41 +45,43 @@ const MovieTable: React.FC<MovieTableProps> = ({ movies, onEdit, onView, onDelet
             <tr key={movie._id}>
               <td>{(currentPage - 1) * itemsPerPage + index + 1}</td>
               <td>{movie.title}</td>
-              <td>{movie.description}</td>
+              <td>{movie.description}
+              </td>
               <td>{movie.year}</td>
               <td>{movie.genre}</td>
               <td>
                 {movie.image ? (
-                  <img src={movie.image} alt={movie.title} style={{ width: '100px', height: 'auto' }} />
+                  <img src={movie.image} alt={movie.title} style={{ width: '100px', height: '100px' }} />
                 ) : (
                   'No Image'
                 )}
               </td>
               <td>
                 {movie.targetUrl ? (
-                  <a href={movie.targetUrl} target="_blank" rel="noopener noreferrer">
-                    Click Here to Watch
+                  <a href={movie.targetUrl} target="_blank" rel="noopener noreferrer" className='d-flex'>
+                 watch 
                   </a>
                 ) : (
                   'No URL'
                 )}
               </td>
               <td>
+                <div className='d-flex '>
                 <Button variant="outline-white" size="lg" className="me-2" onClick={() => onEdit(movie)}>
                   <i className="bi bi-pencil"></i>
                 </Button>
                 <Button variant="outline-white" size="lg" className="me-2" onClick={() => onView(movie)}>
                   <i className="bi bi-eye"></i>
                 </Button>
-                <Button variant="outline-white" size="lg" onClick={() => onDelete(movie._id)}>
+                <Button variant="outline-white" size="lg" className="me-2 " onClick={() => onDelete(movie._id)}>
                   <i className="bi bi-trash"></i>
                 </Button>
+                </div>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
-      
       <div className="d-flex justify-content-center mt-3">
         <Pagination>
           <Pagination.Prev onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} />

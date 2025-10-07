@@ -24,18 +24,19 @@ const AddEditMovieModal: React.FC<AddEditMovieModalProps> = ({
     onInputChange,
     allGenres,
 }) => {
-    // This handler will prevent the default form submission and call the onSave prop
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
+        if(formErrors){
+            console.log("validate")
+            return;
+        }
         onSave();
     };
-
     return (
         <Modal show={show} onHide={onClose}>
             <Modal.Header closeButton>
                 <Modal.Title>{isEditing ? 'Edit Movie' : 'Add Movie'}</Modal.Title>
             </Modal.Header>
-            {/* Wrap your form controls in a <Form> tag with an onSubmit handler */}
             <Form onSubmit={handleSubmit}>
                 <Modal.Body>
                     <Form.Group className="mb-3" controlId="title">
@@ -44,7 +45,6 @@ const AddEditMovieModal: React.FC<AddEditMovieModalProps> = ({
                         <Form.Control
                             type="text"
                             name="title"
-                            
                             value={movie.title}
                             onChange={onInputChange}
                             isInvalid={!!formErrors?.title}
@@ -80,9 +80,6 @@ const AddEditMovieModal: React.FC<AddEditMovieModalProps> = ({
                         </Form.Select>
                         <Form.Control.Feedback type="invalid">{formErrors?.genre}</Form.Control.Feedback>
                     </Form.Group>
-
-
-
                     <Form.Group className="mb-3" controlId="year">
                         <Form.Label>Year <span>*</span></Form.Label>
                         <Form.Control

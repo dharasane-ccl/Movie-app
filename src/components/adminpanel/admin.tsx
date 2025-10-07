@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect, useCallback, ChangeEvent } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import Lists from '../moviepage/movie-list';
@@ -70,7 +68,6 @@ const AdminPanel: React.FC = () => {
             setNewMovie({ ...newMovie, [name]: processedValue });
         }
     };
-    // FIX: Check localStorage for user data on mount
     useEffect(() => {
         const checkUserStatus = () => {
             setIsLoading(true);
@@ -108,6 +105,10 @@ const AdminPanel: React.FC = () => {
 
     const handleCreate = () => {
         const errors = validateMovie(newMovie);
+        if(Object.keys(errors).length>0){
+            setAddFormErrors(errors);
+            return;
+        }
         setMovies(prevMovies => [{ ...newMovie, _id: uuidv4() }, ...prevMovies]);
         setCurrentPage(1)
         handleCloseAddModal();
@@ -162,16 +163,12 @@ const AdminPanel: React.FC = () => {
         setShowDeleteConfirmModal(false);
     };
 
-    // FIX: Clear localStorage on logout
     const onLogout = () => {
         localStorage.removeItem('isLoggedIn');
         localStorage.removeItem('currentUser');
         setUser(null);
         setShowUserInfo(false);
     };
-
-
-
     return (
         <div className="container mt-4">
             {isLoading ? (
@@ -238,6 +235,7 @@ const AdminPanel: React.FC = () => {
                     )}
                 </Col>
             </Row>
+            
             {user && (
                 <MovieTable
                     movies={filteredMovies}
