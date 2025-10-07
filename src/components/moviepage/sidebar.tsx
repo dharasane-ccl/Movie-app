@@ -7,10 +7,10 @@ interface SidebarProps {
   setSidebarOpen: (open: boolean) => void;
   onShowFavorites: () => void;
   onShowAllMovies: () => void;
-  onShowMasterMovies: () => void; 
+  onShowMasterMovies: () => void;
   showFavorites: boolean;
-  showMasterMovies: boolean; 
-  currentUser: User | null; 
+  showMasterMovies: boolean;
+  currentUser: User | null;
 }
 const Sidebar: React.FC<SidebarProps> = ({
   sidebarOpen,
@@ -58,24 +58,22 @@ const Sidebar: React.FC<SidebarProps> = ({
   );
   return (
     <>
-      <nav className="navbar navbar-light bg-white shadow d-xxl-none">
+      <nav className="navbar navbar-light  d-xxl-none">
         <div className="container ">
           <button
-            className="btn btn-success"
+            className="btn btn-white"
             type="button"
             onClick={() => setSidebarOpen(!sidebarOpen)}
           >
             ☰
           </button>
-          <span className="navbar-brand ms-2 mb-0 h1">Movies</span>
         </div>
       </nav>
-
       <div
         ref={sidebarRef}
         className={`bg-white shadow vh-100 p-3 position-fixed top-0 start-0  ${sidebarOpen ? 'd-block' : 'd-none'} d-xxl-block`}
         style={{ width: '210px', zIndex: 1030 }}
-          onClick={() => setSidebarOpen(!sidebarOpen)}
+        onClick={() => setSidebarOpen(!sidebarOpen)}
       >
         <div className="d-flex align-items-center mb-4">
           <img src="assets/logo.png" alt="Just Watch Logo" className="me-2" />
@@ -87,7 +85,7 @@ const Sidebar: React.FC<SidebarProps> = ({
           <button
             onClick={onShowMasterMovies}
             className={`nav-link text-black mb-2 my-3 p-3 ${showMasterMovies ? 'bg-success text-white' : 'bg-white'
-              
+
 
               }`}
           >

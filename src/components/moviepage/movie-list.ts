@@ -6,7 +6,7 @@ const Lists = [
     description: "An insomniac office worker looking for a way to change his life crosses paths",
     image: "/assets/movie.jpeg",
     genre: "cartoon",
-    targetUrl:"https://share.google/h2XpZ5aB1O9kF6yT"
+    targetUrl:"https://youtu.be/p_2DXWte8bo?si=qdYS1NydXuj19R99"
   },
   {
     _id: "2",
@@ -15,7 +15,7 @@ const Lists = [
     description: "The lives of two mob hitmen, a boxer, a gangster's wife.",
     image: "/assets/movie2.jpeg",
     genre: "action",
-    targetUrl:"https://share.google/c7YqR8sW2L0fG4xV"
+    targetUrl:"https://youtu.be/p_2DXWte8bo?si=qdYS1NydXuj19R99"
   },
   {
     _id: "3",
@@ -24,16 +24,16 @@ const Lists = [
     description: "The presidencies of Kennedy and Johnson, the Vietnam War.",
     image: "/assets/movie3.jpeg",
     genre: "mystery",
-    targetUrl:"https://share.google/e9ZaG6xM4Q2cB8jN"
+    targetUrl:"https://youtu.be/p_2DXWte8bo?si=qdYS1NydXuj19R99"
   },
   {
     _id: "4",
-    title: "The Lord of the Rings: The Fellowship of the Ring",
+    title: " The Fellowship of the Ring",
     year: 2001,
     description: "A meek Hobbit from the Shire and eight companions .",
     image: "/assets/movie4.jpeg",
     genre: "thriller",
-    targetUrl:"https://share.google/mN6B8pT4Q0xH7jVz"
+    targetUrl:"https://youtu.be/p_2DXWte8bo?si=qdYS1NydXuj19R99"
   },
   {
     _id: "5",
@@ -42,7 +42,7 @@ const Lists = [
     description: "A young FBI cadet must receive the help of an incarcerated and manipulative cannibal.",
     image: "/assets/movie5.jpeg",
     genre: "martialarts",
-    targetUrl:"https://share.google/b8WcV3sL5fE0hYqZ"
+    targetUrl:"https://youtu.be/p_2DXWte8bo?si=qdYS1NydXuj19R99"
   },
   {
     _id: "6",
@@ -51,7 +51,7 @@ const Lists = [
     description: "During her family's move to the suburbs.",
     image: "/assets/movie6.jpeg",
     genre: "superhero",
-    targetUrl:"https://share.google/u5O7iK2lJ8mE4nPq"
+    targetUrl:"https://youtu.be/p_2DXWte8bo?si=qdYS1NydXuj19R99"
   },  
   {
     _id: "7",
@@ -60,7 +60,7 @@ const Lists = [
     description: "Following the Normandy Landings, a group of U.S.",
     image: "/assets/movie7.jpeg",
     genre: "adventure",
-    targetUrl:"https://share.google/r3S9jT5kF6hL2aP"
+    targetUrl:"https://youtu.be/p_2DXWte8bo?si=qdYS1NydXuj19R99"
   },
   {
     _id: "8",
@@ -69,7 +69,7 @@ const Lists = [
     description: "The adventures of Gustave H, a legendary concierge at a famous hotel, and Zero Moustafa",
     image: "/assets/movie8.jpeg",
     genre: "fantasy",
-    targetUrl:"https://share.google/w4C1eG6yT9jK8xM"
+    targetUrl:"https://youtu.be/p_2DXWte8bo?si=qdYS1NydXuj19R99"
   },
   {
     _id: "9",
@@ -78,7 +78,7 @@ const Lists = [
     description: "A bounty hunting scam joins two men in an uneasy alliance against a third in a race to find a fortune in gold.",
     image: "/assets/movie9.jpeg",
     genre: "drama",
-    targetUrl:"https://share.google/o6L8zW4aD1kH3rN"
+    targetUrl:"https://youtu.be/p_2DXWte8bo?si=qdYS1NydXuj19R99"
   },
   {
     _id: "10",
@@ -87,7 +87,7 @@ const Lists = [
     description: "A promising young drummer enrolls at a cut-throat music conservatory where his dreams .",
     image: "/assets/movie10.jpeg",
     genre: "anime",
-    targetUrl:"https://share.google/q9P7oR4sJ2iL1uE"
+    targetUrl:"https://youtu.be/p_2DXWte8bo?si=qdYS1NydXuj19R99"
   },
   {
     _id: "11",
@@ -96,7 +96,7 @@ const Lists = [
     description: "A poor family, the Kims, .",
     image: "/assets/m11.jpeg",
     genre: "comedy",
-    targetUrl: "https://share.google/f7G4hJ9kP2rM5vS"
+    targetUrl: "https://youtu.be/p_2DXWte8bo?si=qdYS1NydXuj19R99"
   },
   {
     _id: "12",
@@ -105,7 +105,7 @@ const Lists = [
     description: "In the falangist Spain of 1944, the bookish young stepdaughter .",
     image: "/assets/m12.jpeg",
     genre: "horror",
-    targetUrl: "https://share.google/g8M5vN0uL6eT7wI"
+    targetUrl: "https://youtu.be/p_2DXWte8bo?si=qdYS1NydXuj19R99"
   },
   {
     _id: "13",
@@ -114,7 +114,7 @@ const Lists = [
     description: "A lonely writer develops an unlikely relationship with an operating system designed to meet his every need.",
     image: "/assets/m13.jpeg",
     genre: "love",
-    targetUrl: "https://share.google/p2Q8sR9eH4yW6jT"
+    targetUrl: "https://youtu.be/p_2DXWte8bo?si=qdYS1NydXuj19R99jT"
   },
   {
     _id: "14",
@@ -123,7 +123,7 @@ const Lists = [
     description: "A woman rebels against a tyrannical ruler in a postapocalyptic desert.",
     image: "/assets/m14.jpeg",
     genre: "western",
-    targetUrl: "https://share.google/i3L7wB8kP1rZ4xQ"
+    targetUrl: "https://youtu.be/p_2DXWte8bo?si=qdYS1NydXuj19R99"
   },
   {
     _id: "15",
@@ -132,7 +132,7 @@ const Lists = [
     description: "Paranormal investigators Ed and Lorraine Warren work to help a family terrorized by a dark presence in their farmhouse.",
     image: "/assets/m15.jpeg",
     genre: "evil",
-    targetUrl: "https://share.google/o1N9pT6fK3cW2lM"
+    targetUrl: "https://youtu.be/p_2DXWte8bo?si=qdYS1NydXuj19R99"
   },
   {
     _id: "16",
@@ -141,7 +141,7 @@ const Lists = [
     description: "A young man and woman meet on a train in Europe, and decide to spend the evening walking around Vienna.",
     image: "/assets/m16.jpeg",
     genre: "musical",
-    targetUrl: "https://share.google/q5R8sA9cW0jB3vN"
+    targetUrl: "https://youtu.be/p_2DXWte8bo?si=qdYS1NydXuj19R99"
   },
   {
     _id: "17",
@@ -150,7 +150,7 @@ const Lists = [
     description: "A linguist is recruited by the military to assist in translating alien communications.",
     image: "/assets/m17.jpeg",
     genre: "war",
-    targetUrl: "https://share.google/m8D2fR0pK5hY7jN"
+    targetUrl: "https://youtu.be/p_2DXWte8bo?si=qdYS1NydXuj19R99"
   },
   {
     _id: "18",
@@ -159,7 +159,7 @@ const Lists = [
     description: "Guilt-stricken after a job gone wrong,.",
     image: "/assets/m18.jpeg",
     genre: "crime",
-    targetUrl: "https://share.google/e9ZaG6xM4Q2cB8jN"
+    targetUrl: "https://youtu.be/p_2DXWte8bo?si=qdYS1NydXuj19R99"
   }
 ];
 
