@@ -3,7 +3,7 @@ import { Pagination, Card, Row, Col } from "react-bootstrap";
 import { User, Movie } from "../user/types";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import Search from './search';
-import { Link } from 'react-router-dom';
+
 
 interface MovieViewPageProps {
     user: User;
@@ -11,6 +11,8 @@ interface MovieViewPageProps {
     favoriteMovies: Movie[];
     onToggleFavorite: (id: string) => void;
     onLogout: () => void;
+    isFavoritesPage: boolean; 
+    pageTitle:string
 }
 
 const getDisplayName = (user: User | null): string => {
@@ -24,7 +26,10 @@ const MovieViewPage: React.FC<MovieViewPageProps> = ({
     onToggleFavorite,
     movielists,
     onLogout,
+    isFavoritesPage,
+    pageTitle,
 }) => {
+     const heading = pageTitle || 'Default Page Heading'; 
 
     const itemsPerPage = 6;
     const [currentPage, setCurrentPage] = useState(1);
@@ -50,7 +55,7 @@ const MovieViewPage: React.FC<MovieViewPageProps> = ({
     }, [movielists, searchTerm, selectedGenre]);
 
     useEffect(() => {
-        setCurrentPage(1);
+        setCurrentPage(6);
     }, [searchTerm,selectedGenre]);
 
     const indexOfLastItem = currentPage * itemsPerPage;
@@ -89,13 +94,16 @@ const MovieViewPage: React.FC<MovieViewPageProps> = ({
                     )}
                 </div>
             )}
-            <h1>Movies</h1>
+             <h1>{heading}</h1>
+
+              
             <Search
                 searchTerm={searchTerm}
                 setSearchTerm={setSearchTerm}
                 selectedGenre={selectedGenre}
                 setSelectedGenre={setSelectedGenre}
             />
+               
             <Row className="mt-3">
                 {currentItems.length > 0 ? (
                     currentItems.map((movie) => (
@@ -113,11 +121,13 @@ const MovieViewPage: React.FC<MovieViewPageProps> = ({
                                         style={{ height: '200px', objectFit: 'cover' }}
                                     />
                                 </a>
+                              
                                 <Card.Body className="d-flex flex-column position-relative">
                                     <h5 className="card-title">{movie.title}</h5>
                                     <h6 className="card-subtitle mb-2 text-muted">{movie.genre}</h6>
                                     <h6 className="card-year">{movie.year}</h6>
                                     <p className="card-text text-truncate flex-grow-1">{movie.description}</p>
+                    
                                         <button
                                             className="position-absolute top-0 end-0 m-2"
                                             onClick={(e) => {
