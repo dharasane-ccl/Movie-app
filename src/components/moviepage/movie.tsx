@@ -3,8 +3,6 @@ import { Card, Row, Col, Form } from "react-bootstrap";
 import { User, Movie } from "../user/types";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import Search from './search';
-import Select from "react-select";
-
 
 interface MovieViewPageProps {
     user: User;
@@ -99,7 +97,7 @@ const MovieViewPage: React.FC<MovieViewPageProps> = ({
         <div className="container my-3">
             {user && (
                 <div
-                    className="position-fixed top-0 end-0 m-2 mx-5 rounded-circle bg-success text-white d-flex justify-content-center align-items-center"
+                    className="position-fixed top-0 end-0 m-2 mx-5 rounded-circle bg-success text-white d-flex justify-content-center align-items-center "
                     style={{ width: "40px", height: "40px", fontSize: "18px", cursor: "pointer", zIndex: 1050 }}
                     onClick={() => setShowUserInfo(!showUserInfo)}
                 >
@@ -118,6 +116,7 @@ const MovieViewPage: React.FC<MovieViewPageProps> = ({
                                 Logout
                             </button>
                         </div>
+
                     )}
                 </div>
             )}
@@ -186,7 +185,6 @@ const MovieViewPage: React.FC<MovieViewPageProps> = ({
                     </Col>
                 )}
             </Row>
-
             <div className="d-flex justify-content-end">
                 <Form.Select
                     value={itemsperpage}
@@ -205,5 +203,4 @@ const MovieViewPage: React.FC<MovieViewPageProps> = ({
         </div>
     );
 };
-
 export default MovieViewPage;
