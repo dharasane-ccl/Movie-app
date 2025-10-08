@@ -1,155 +1,87 @@
-vimport React, { useState, useEffect, useCallback, useMemo } from 'react';
-import Select from "react-select";
-import { v4 as uuidv4 } from 'uuid';
-import Lists from '../moviepage/movie-list';
-import { Movie, User } from "./types";
-import { Button, Row, Col } from 'react-bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap-icons/font/bootstrap-icons.css';
-import MovieTable from './movietable';
-import AddEditMovieModal from './addedit';
-import ViewMovieModal from './viewmodal';
-import DeleteConfirmModal from './delete';
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import LoginPage from './components/user/login';
+import MovieViewPage from './components/moviepage/movie';
+import Sidebar from './components/moviepage/sidebar';
+import { User, Movie } from './components/user/types';
+import AdminPanel from './components/adminpanel/admin';
 
-// Removed unnecessary import
-// import { title } from 'process';
+function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => localStorage.getItem('isLoggedIn') === 'true');
+  const [currentUser, setCurrentUser] = useState<User | null>(() => {
+    const saved = localStorage.getItem('currentUser');
+    return saved ? JSON.parse(saved) : null;
+  });
+  const [sidebarOpen, setSidebarOpen] = useState(false); // Sidebar open state
 
-interface MovieFormErrors {
-    user?: User;
-    title?: string;
-    description?: string;
-    genre?: string;
-    year?: string;
-    image?: string;
-    targetUrl?: string;   
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    setCurrentUser(null);
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('currentUser');
+  };
+
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={isAuthenticated ? <Navigate to="/movie" /> : <Navigate to="/login" />} />
+        <Route
+          path="/login"
+          element={
+            isAuthenticated ? (
+              <Navigate to="/movie" replace />
+            ) : (
+              <LoginPage setIsAuthenticated={setIsAuthenticated} setUser={setCurrentUser} />
+            )
+          }
+        />
+        <Route
+          path="/movie"
+          element={
+            isAuthenticated && currentUser ? (
+              <>
+                <Sidebar
+                  onLogout={handleLogout}
+                  sidebarOpen={sidebarOpen}
+                  setSidebarOpen={setSidebarOpen}
+                  currentUser={currentUser}
+                />
+                <div className={`movie-content ${sidebarOpen ? 'shift' : ''}`} style={{ transition: 'margin-left 0.3s ease' }}>
+                  <MovieViewPage
+                    user={currentUser}
+                    onLogout={handleLogout}
+                    pageTitle="Movies"
+                  />
+                </div>
+              </>
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />
+        <Route
+          path="/admin"
+          element={
+            isAuthenticated && currentUser?.type === 1 ? (
+              <>
+                <Sidebar
+                  onLogout={handleLogout}
+                  sidebarOpen={sidebarOpen}
+                  setSidebarOpen={setSidebarOpen}
+                  currentUser={currentUser}
+                />
+                <div className={`movie-content ${sidebarOpen ? 'shift' : ''}`} style={{ transition: 'margin-left 0.3s ease' }}>
+                  <AdminPanel />
+                </div>
+              </>
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
-const initialNewMovieState: Movie = {
-    _id: '',
-    title: '',
-    description: '',
-    genre: '',
-    image: '',
-    isFavorite: false,
-    year: 0,
-    targetUrl: '',
-};
-
-const getDisplayName = (currentUser: User | null): string => {
-    if (!currentUser) return "";
-    const name = [currentUser.first_name, currentUser.last_name].filter(Boolean).join(" ").trim();
-    return name || currentUser.email;
-};
-
-const AdminPanel: React.FC = () => {
-    const [movies, setMovies] = useState<Movie[]>([]);
-    const [searchTerm, setSearchTerm] = useState<string>('');
-    const [filterGenre, setFilterGenre] = useState<string>('All');
-    const [editingMovie, setEditingMovie] = useState<Movie | null>(null);
-    const [deletingMovieId, setDeletingMovieId] = useState<string | null>(null);
-    const [newMovie, setNewMovie] = useState<Movie>(initialNewMovieState);
-    const [showAddModal, setShowAddModal] = useState<boolean>(false);
-    const [showEditModal, setShowEditModal] = useState<boolean>(false);
-    const [showViewModal, setShowViewModal] = useState<boolean>(false);
-    const [showDeleteConfirmModal, setShowDeleteConfirmModal] = useState<boolean>(false);
-    const [viewingMovie, setViewingMovie] = useState<Movie | null>(null);
-    const [showUserInfo, setShowUserInfo] = useState(false);
-    const [user, setUser] = useState<User | null>(null);
-    const [addFormErrors, setAddFormErrors] = useState<MovieFormErrors | null>(null);
-    const [editFormErrors, setEditFormErrors] = useState<MovieFormErrors | null>(null);
-    const [isLoading, setIsLoading] = useState(true);
-    const [currentPage, setCurrentPage] = useState(1);
-
-    const allGenres = useMemo(() => {
-        return Array.from(new Set(movies.map(movie => movie.genre)));
-    }, [movies]);
-    
-    // Create the options array for react-select
-    const genreOptions = useMemo(() => {
-        const options = allGenres.map(genre => ({ value: genre, label: genre }));
-        return [{ value: "All", label: "All Genres" }, ...options];
-    }, [allGenres]);
-
-    // Find the currently selected option object
-    const selectedGenreOption = useMemo(() => {
-        // Corrected logic: provide a default option if no genre is selected
-        return genreOptions.find(option => option.value === filterGenre) || genreOptions[0];
-    }, [filterGenre, genreOptions]);
-
-    const handleGenreChange = (option: any) => {
-        setFilterGenre(option.value);
-    };
-
-    function handleInputChange(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>): void {
-        const { name, value } = e.target;
-        const processedValue = name === 'year' ? parseInt(value) || 0 : value;
-
-        if (editingMovie) {
-            setEditingMovie({ ...editingMovie, [name]: processedValue });
-        } else {
-            setNewMovie({ ...newMovie, [name]: processedValue });
-        }
-    };
-   
-    useEffect(() => {
-        const checkUserStatus = () => {
-            setIsLoading(true);
-            try {
-                const storedUser = localStorage.getItem('currentUser');
-                if (storedUser) {
-                    setUser(JSON.parse(storedUser));
-                }
-            } catch (error) {
-                console.error("Failed to parse user data from localStorage:", error);
-            } finally {
-                setIsLoading(false);
-            }
-        };
-        checkUserStatus();
-        setMovies(Lists as Movie[]);
-    }, []);
-
-    const filteredMovies = useMemo(() => {
-        return movies.filter(movie => {
-            const matchesSearch = movie.title.toLowerCase().includes(searchTerm.toLowerCase());
-            const matchesGenre = filterGenre === 'All' || movie.genre === filterGenre;
-            return matchesSearch && matchesGenre;
-        });
-    }, [movies, searchTerm, filterGenre]);
-    
-    const validateMovie = useCallback((movie: Movie): MovieFormErrors => {
-        let errors: MovieFormErrors = {};
-        if (!movie.title.trim()) errors.title = 'Title is required.';
-        if (!movie.description.trim()) errors.description = 'Description is required.';
-        if (!movie.genre.trim()) errors.genre = 'Genre is required.';
-        if (!movie.year || movie.year <= 0 || isNaN(movie.year)) errors.year = 'Year must be a positive number.';
-        if (movie.targetUrl && !/^(ftp|http|https):\/\/[^ "]+$/.test(movie.targetUrl)) errors.targetUrl = 'Invalid Target URL format.';
-        return errors;
-    }, []);
-
-    return (
-        <div className="container-fluid">
-            <Row className="my-3">
-                <Col md={4}>
-                    <Button onClick={() => setShowAddModal(true)}>Add New Movie</Button>
-                </Col>
-                <Col md={4} className="mb-2 mb-md-0 px-5">
-                    <Select
-                        options={genreOptions}
-                        value={selectedGenreOption}
-                        onChange={handleGenreChange}
-                        menuPlacement="auto"
-                        menuPortalTarget={document.body}
-                        styles={{
-                            menuPortal: (base) => ({ ...base, zIndex: 9999 }),
-                        }}
-                    />
-                </Col>
-            </Row>
-            {/* ... Other parts of your UI, like the MovieTable ... */}
-            {/* ... Modals like AddEditMovieModal, ViewMovieModal, etc. ... */}
-        </div>
-    );
-};
-
-export default AdminPanel;
+export default App;
