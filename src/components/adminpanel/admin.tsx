@@ -13,8 +13,6 @@ import DeleteConfirmModal from './delete';
 import { title } from 'process';
 import Select from "react-select";
 
-
-
 interface MovieFormErrors {
     user?: User;
     title?: string;
@@ -40,6 +38,7 @@ const getDisplayName = (currentUser: User | null): string => {
     const name = [currentUser.first_name, currentUser.last_name].filter(Boolean).join(" ").trim();
     return name || currentUser.email;
 };
+
 const AdminPanel: React.FC = () => {
     const [movies, setMovies] = useState<Movie[]>([]);
     const [searchTerm, setSearchTerm] = useState<string>('');
@@ -300,6 +299,4 @@ const AdminPanel: React.FC = () => {
         </div>
     );
 };
-
-
 export default AdminPanel;
