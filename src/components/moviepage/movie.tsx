@@ -94,7 +94,7 @@ const MovieViewPage: React.FC<MovieViewPageProps> = ({
     }, [filteredMovies, currentPage, itemsperpage]);
 
     return (
-        <div className="container my-3">
+        <div className="container my-5">
             {user && (
                 <div
                     className="position-fixed top-0 end-0 m-2 mx-5 rounded-circle bg-success text-white d-flex justify-content-center align-items-center "
