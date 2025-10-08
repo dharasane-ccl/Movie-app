@@ -111,10 +111,10 @@ const MovieTable: React.FC<MovieTableProps> = ({ movies, onEdit, onView, onDelet
           onChange={(e) => setItemsPerPage(Number(e.target.value))}
           style={{ width: '67px' }}
         >
-          <option value="4">4 </option>
-          <option value="6">6 </option>
+          <option value="5">5</option>
           <option value="10">10 </option>
-          <option value="18">18</option>
+          <option value="50">50 </option>
+          <option value="100">100</option>
         </Form.Select>
 
         <span className="text-muted my-2 mx-5">
