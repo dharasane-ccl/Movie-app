@@ -1,4 +1,3 @@
-// src/App.tsx
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import LoginPage from './components/user/login';
@@ -14,6 +13,7 @@ function App() {
     const saved = localStorage.getItem('currentUser');
     return saved ? JSON.parse(saved) : null;
   });
+
   const [movies, setMovies] = useState<Movie[]>(() => {
     const localFavorites = localStorage.getItem('favoriteMovies');
     if (localFavorites) {
@@ -22,12 +22,12 @@ function App() {
     }
     return Lists.map((m) => ({ ...m, isFavorite: false }));
   });
-  
+
   useEffect(() => {
     const favoriteIds = movies.filter((m) => m.isFavorite).map((m) => m._id);
     localStorage.setItem('favoriteMovies', JSON.stringify(favoriteIds));
   }, [movies]);
-  
+
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const handleToggleFavorite = (id: string) => {
@@ -37,14 +37,14 @@ function App() {
       )
     );
   };
-  
+
   const handleLogout = () => {
     setIsAuthenticated(false);
     setCurrentUser(null);
     localStorage.removeItem('isLoggedIn');
     localStorage.removeItem('currentUser');
   };
-  
+
   return (
     <BrowserRouter>
       <Routes>
@@ -59,6 +59,7 @@ function App() {
             )
           }
         />
+
         <Route
           path="/movie"
           element={
@@ -92,8 +93,8 @@ function App() {
                     favoriteMovies={movies.filter((m) => m.isFavorite)}
                     onToggleFavorite={handleToggleFavorite}
                     onLogout={handleLogout}
-                    isFavoritesPage={false} 
-                    pageTitle={'Movies'}                  />
+                    isFavoritesPage={false}
+                    pageTitle={'Movies'} />
                 </div>
               </>
             ) : (
@@ -101,6 +102,7 @@ function App() {
             )
           }
         />
+
         <Route
           path="/movie/favorites"
           element={
@@ -112,30 +114,15 @@ function App() {
                   setSidebarOpen={setSidebarOpen}
                   currentUser={currentUser}
                 />
-                {sidebarOpen && (
-                  <div
-                    onClick={() => setSidebarOpen(false)}
-                    style={{
-                      position: 'fixed',
-                      top: 0,
-                      left: 0,
-                      width: '100%',
-                      height: '100%',
-                      zIndex: 1020,
-                      backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                      cursor: 'pointer',
-                    }}
-                  />
-                )}
                 <div style={{ marginLeft: sidebarOpen ? '210px' : '0', transition: 'margin-left 0.3s ease' }}>
                   <MovieViewPage
                     user={currentUser}
-                    movielists={movies.filter((m) => m.isFavorite)} 
+                    movielists={movies.filter((m) => m.isFavorite)}
                     favoriteMovies={movies.filter((m) => m.isFavorite)}
                     onToggleFavorite={handleToggleFavorite}
                     onLogout={handleLogout}
-                    isFavoritesPage={false} 
-                    pageTitle="Favorites" 
+                    isFavoritesPage={false}
+                    pageTitle="Favorites"
                   />
                 </div>
               </>
@@ -144,6 +131,7 @@ function App() {
             )
           }
         />
+
         <Route
           path="/admin"
           element={
