@@ -7,6 +7,7 @@ interface LoginPageProps {
   setIsAuthenticated: (isAuthenticated: boolean) => void;
   setUser: (user: User) => void;
 }
+
 const LoginPage: React.FC<LoginPageProps> = ({ setIsAuthenticated, setUser }) => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
@@ -40,6 +41,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ setIsAuthenticated, setUser }) =>
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!validate()) return;
@@ -63,6 +65,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ setIsAuthenticated, setUser }) =>
       localStorage.setItem('currentUser', JSON.stringify(foundUser));
     }
   };
+
   return (
     <div className="container d-flex justify-content-center align-items-center vh-100">
       <div className="card shadow p-5" style={{ maxWidth: "500px", width: "100%" }}>

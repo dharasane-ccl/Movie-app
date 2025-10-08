@@ -1,93 +1,87 @@
-// src/components/adminpanel/movietable.tsx
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import LoginPage from './components/user/login';
+import MovieViewPage from './components/moviepage/movie';
+import Sidebar from './components/moviepage/sidebar';
+import { User, Movie } from './components/user/types';
+import AdminPanel from './components/adminpanel/admin';
 
-import React from 'react';
-import { Table, Button, Pagination } from 'react-bootstrap';
-import { Movie } from './types';
-import { Dispatch, SetStateAction } from 'react';
+function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => localStorage.getItem('isLoggedIn') === 'true');
+  const [currentUser, setCurrentUser] = useState<User | null>(() => {
+    const saved = localStorage.getItem('currentUser');
+    return saved ? JSON.parse(saved) : null;
+  });
+  const [sidebarOpen, setSidebarOpen] = useState(false); // Sidebar open state
 
-// Define the interface for the component's props
-interface MovieTableProps {
-    movies: Movie[];
-    onEdit: (movie: Movie) => void;
-    onDelete: (id: string) => void;
-    onView: (movie: Movie) => void;
-    currentPage: number;
-    onPageChange: Dispatch<SetStateAction<number>>;
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    setCurrentUser(null);
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('currentUser');
+  };
+
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={isAuthenticated ? <Navigate to="/movie" /> : <Navigate to="/login" />} />
+        <Route
+          path="/login"
+          element={
+            isAuthenticated ? (
+              <Navigate to="/movie" replace />
+            ) : (
+              <LoginPage setIsAuthenticated={setIsAuthenticated} setUser={setCurrentUser} />
+            )
+          }
+        />
+        <Route
+          path="/movie"
+          element={
+            isAuthenticated && currentUser ? (
+              <>
+                <Sidebar
+                  onLogout={handleLogout}
+                  sidebarOpen={sidebarOpen}
+                  setSidebarOpen={setSidebarOpen}
+                  currentUser={currentUser}
+                />
+                <div className={`movie-content ${sidebarOpen ? 'shift' : ''}`} style={{ transition: 'margin-left 0.3s ease' }}>
+                  <MovieViewPage
+                    user={currentUser}
+                    onLogout={handleLogout}
+                    pageTitle="Movies"
+                  />
+                </div>
+              </>
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />
+        <Route
+          path="/admin"
+          element={
+            isAuthenticated && currentUser?.type === 1 ? (
+              <>
+                <Sidebar
+                  onLogout={handleLogout}
+                  sidebarOpen={sidebarOpen}
+                  setSidebarOpen={setSidebarOpen}
+                  currentUser={currentUser}
+                />
+                <div className={`movie-content ${sidebarOpen ? 'shift' : ''}`} style={{ transition: 'margin-left 0.3s ease' }}>
+                  <AdminPanel />
+                </div>
+              </>
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
-const MovieTable: React.FC<MovieTableProps> = ({
-    movies,
-    onEdit,
-    onDelete,
-    onView,
-    currentPage,
-    onPageChange
-}) => {
-    // Determine the number of movies per page
-    const moviesPerPage = 10;
-    const totalPages = Math.ceil(movies.length / moviesPerPage);
-
-    // Calculate the movies to display on the current page
-    const lastMovieIndex = currentPage * moviesPerPage;
-    const firstMovieIndex = lastMovieIndex - moviesPerPage;
-    const currentMovies = movies.slice(firstMovieIndex, lastMovieIndex);
-
-    // Generate pagination items
-    const renderPaginationItems = () => {
-        let items = [];
-        for (let number = 1; number <= totalPages; number++) {
-            items.push(
-                <Pagination.Item
-                    key={number}
-                    active={number === currentPage}
-                    onClick={() => onPageChange(number)}
-                >
-                    {number}
-                </Pagination.Item>
-            );
-        }
-        return items;
-    };
-
-    return (
-        <>
-            <Table striped bordered hover responsive>
-                <thead>
-                    <tr>
-                        <th>Title</th>
-                        <th>Genre</th>
-                        <th>Year</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {currentMovies.map(movie => (
-                        <tr key={movie._id}>
-                            <td>{movie.title}</td>
-                            <td>{movie.genre}</td>
-                            <td>{movie.year}</td>
-                            <td>
-                                <Button variant="info" size="sm" onClick={() => onView(movie)} className="me-2">
-                                    <i className="bi bi-eye"></i> View
-                                </Button>
-                                <Button variant="warning" size="sm" onClick={() => onEdit(movie)} className="me-2">
-                                    <i className="bi bi-pencil"></i> Edit
-                                </Button>
-                                <Button variant="danger" size="sm" onClick={() => onDelete(movie._id)}>
-                                    <i className="bi bi-trash"></i> Delete
-                                </Button>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </Table>
-            <div className="d-flex justify-content-center">
-                <Pagination>
-                    {renderPaginationItems()}
-                </Pagination>
-            </div>
-        </>
-    );
-};
-
-export default MovieTable;
+export default App;

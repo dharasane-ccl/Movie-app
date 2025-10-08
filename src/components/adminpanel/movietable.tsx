@@ -8,8 +8,8 @@ interface MovieTableProps {
   onEdit: (movie: Movie) => void;
   onDelete: (id: string) => void;
   onView: (movie: Movie) => void;
-
 }
+
 const MovieTable: React.FC<MovieTableProps> = ({ movies, onEdit, onView, onDelete }) => {
 
   const [itemsPerPage, setItemsPerPage] = useState(6)

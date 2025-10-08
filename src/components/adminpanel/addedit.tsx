@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
-import { Movie, MovieFormErrors } from './types'; 
+import { Movie, MovieFormErrors } from './types';
 
 interface AddEditMovieModalProps {
     show: boolean;
@@ -24,9 +24,10 @@ const AddEditMovieModal: React.FC<AddEditMovieModalProps> = ({
     onInputChange,
     allGenres,
 }) => {
+
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
-        if(formErrors){
+        if (formErrors) {
             console.log("validate")
             return;
         }
@@ -48,10 +49,11 @@ const AddEditMovieModal: React.FC<AddEditMovieModalProps> = ({
                             value={movie.title}
                             onChange={onInputChange}
                             isInvalid={!!formErrors?.title}
-                            
+
                         />
                         <Form.Control.Feedback type="invalid">{formErrors?.title}</Form.Control.Feedback>
                     </Form.Group>
+
                     <Form.Group className="mb-3" controlId="description">
                         <Form.Label>Description <span className='text-danger'>*</span></Form.Label>
                         <Form.Control
@@ -80,6 +82,7 @@ const AddEditMovieModal: React.FC<AddEditMovieModalProps> = ({
                         </Form.Select>
                         <Form.Control.Feedback type="invalid">{formErrors?.genre}</Form.Control.Feedback>
                     </Form.Group>
+
                     <Form.Group className="mb-3" controlId="year">
                         <Form.Label>Year <span className='text-danger'>*</span></Form.Label>
                         <Form.Control
@@ -91,7 +94,8 @@ const AddEditMovieModal: React.FC<AddEditMovieModalProps> = ({
                         />
                         <Form.Control.Feedback type="invalid">{formErrors?.year}</Form.Control.Feedback>
                     </Form.Group>
-                    <Form.Group className="mb-3" controlId="image">
+
+                    <Form.Group className="mb-3" controlId="image" style={{width:'100px',height:'100px'}}>
                         <Form.Label>Image URL</Form.Label>
                         <Form.Control
                             type="text"
@@ -102,6 +106,7 @@ const AddEditMovieModal: React.FC<AddEditMovieModalProps> = ({
                         />
                         <Form.Control.Feedback type="invalid">{formErrors?.image}</Form.Control.Feedback>
                     </Form.Group>
+
                     <Form.Group className="mb-3" controlId="targetUrl">
                         <Form.Label>Target URL</Form.Label>
                         <Form.Control
@@ -113,6 +118,7 @@ const AddEditMovieModal: React.FC<AddEditMovieModalProps> = ({
                         />
                         <Form.Control.Feedback type="invalid">{formErrors?.targetUrl}</Form.Control.Feedback>
                     </Form.Group>
+
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={onClose}>

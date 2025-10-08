@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useCallback, ChangeEvent } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import react from "react-select";
 import { v4 as uuidv4 } from 'uuid';
 import Lists from '../moviepage/movie-list';
 import { Movie, User } from "./types";
@@ -10,6 +11,7 @@ import AddEditMovieModal from './addedit';
 import ViewMovieModal from './viewmodal';
 import DeleteConfirmModal from './delete';
 import { title } from 'process';
+import Select from "react-select";
 
 interface MovieFormErrors {
     user?: User;
@@ -19,9 +21,7 @@ interface MovieFormErrors {
     year?: string;
     image?: string;
     targetUrl?: string;
-    
 }
-
 const initialNewMovieState: Movie = {
     _id: '',
     title: '',
@@ -58,6 +58,23 @@ const AdminPanel: React.FC = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
 
+    const allGenres = useMemo(() => {
+        return Array.from(new Set(movies.map(movie => movie.genre)));
+    }, [movies]);
+
+    const genreOptions = useMemo(() => {
+        const options = allGenres.map(genre => ({ value: genre, label: genre }));
+        return [{ value: "All", label: "All Genres" }, ...options];
+    }, [allGenres]);
+
+    const selectedGenreOption = useMemo(() => {
+        return genreOptions.find(option => option.value === filterGenre) || { value: 'All', label: 'All Genres' };
+    }, [filterGenre, genreOptions]);
+
+    const handleGenreChange = (option: any) => {
+        setFilterGenre(option.value);
+    };
+
     function handleInputChange(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>): void {
         const { name, value } = e.target;
         const processedValue = name === 'year' ? parseInt(value) || 0 : value;
@@ -68,6 +85,7 @@ const AdminPanel: React.FC = () => {
             setNewMovie({ ...newMovie, [name]: processedValue });
         }
     };
+
     useEffect(() => {
         const checkUserStatus = () => {
             setIsLoading(true);
@@ -86,12 +104,14 @@ const AdminPanel: React.FC = () => {
         setMovies(Lists as Movie[]);
     }, []);
 
-    const allGenres = Array.from(new Set(movies.map(movie => movie.genre)));
-    const filteredMovies = movies.filter(movie => {
-        const matchesSearch = movie.title.toLowerCase().includes(searchTerm.toLowerCase());
-        const matchesGenre = filterGenre === 'All' || movie.genre === filterGenre;
-        return matchesSearch && matchesGenre;
-    });
+
+    const filteredMovies = useMemo(() => {
+        return movies.filter(movie => {
+            const matchesSearch = movie.title.toLowerCase().includes(searchTerm.toLowerCase());
+            const matchesGenre = filterGenre === 'All' || movie.genre === filterGenre;
+            return matchesSearch && matchesGenre;
+        });
+    }, [movies, searchTerm, filterGenre]);
 
     const validateMovie = useCallback((movie: Movie): MovieFormErrors => {
         let errors: MovieFormErrors = {};
@@ -105,7 +125,7 @@ const AdminPanel: React.FC = () => {
 
     const handleCreate = () => {
         const errors = validateMovie(newMovie);
-        if(Object.keys(errors).length>0){
+        if (Object.keys(errors).length > 0) {
             setAddFormErrors(errors);
             return;
         }
@@ -200,10 +220,8 @@ const AdminPanel: React.FC = () => {
                 </div>
             ) : (
                 <div className="position-fixed top-5 end-0 m-2 mx-5" style={{ zIndex: 1050 }}>
-
                 </div>
             )}
-
             <h2 className="mb-4">Admin Page</h2>
             <Row className="mb-4 align-items-center">
                 <Col md={4} className="mb-2 mb-md-0 px-5">
@@ -216,16 +234,16 @@ const AdminPanel: React.FC = () => {
                     />
                 </Col>
                 <Col md={4} className="mb-2 mb-md-0 px-5">
-                    <select
-                        className="form-select"
-                        value={filterGenre}
-                        onChange={(e) => setFilterGenre(e.target.value)}
-                    >
-                        <option value="All">All Genres</option>
-                        {allGenres.map(genre => (
-                            <option key={genre} value={genre}>{genre}</option>
-                        ))}
-                    </select>
+                    <Select
+                        options={genreOptions}
+                        value={selectedGenreOption}
+                        onChange={handleGenreChange}
+                        menuPlacement="auto"
+                        menuPortalTarget={document.body}
+                        styles={{
+                            menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+                        }}
+                    />
                 </Col>
                 <Col md={4} className="mb-2 mb-md-0 d-flex justify-content-md-end">
                     {user && (
@@ -281,6 +299,4 @@ const AdminPanel: React.FC = () => {
         </div>
     );
 };
-
-
 export default AdminPanel;

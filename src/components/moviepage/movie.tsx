@@ -4,7 +4,6 @@ import { User, Movie } from "../user/types";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import Search from './search';
 
-
 interface MovieViewPageProps {
     user: User;
     movielists: Movie[];
@@ -94,12 +93,11 @@ const MovieViewPage: React.FC<MovieViewPageProps> = ({
         return `${indexOfFirstItem}-${indexOfLastItem} of ${totalFilteredItems}`;
     }, [filteredMovies, currentPage, itemsperpage]);
 
-
     return (
-        <div className="container my-3">
+        <div className="container my-5">
             {user && (
                 <div
-                    className="position-fixed top-0 end-0 m-2 mx-5 rounded-circle bg-success text-white d-flex justify-content-center align-items-center"
+                    className="position-fixed top-0 end-0 m-2 mx-5 rounded-circle bg-success text-white d-flex justify-content-center align-items-center "
                     style={{ width: "40px", height: "40px", fontSize: "18px", cursor: "pointer", zIndex: 1050 }}
                     onClick={() => setShowUserInfo(!showUserInfo)}
                 >
@@ -118,6 +116,7 @@ const MovieViewPage: React.FC<MovieViewPageProps> = ({
                                 Logout
                             </button>
                         </div>
+
                     )}
                 </div>
             )}
@@ -198,6 +197,9 @@ const MovieViewPage: React.FC<MovieViewPageProps> = ({
                     <option value="10">10 </option>
                     <option value="18">18</option>
                 </Form.Select>
+                <span className="text-muted my-2 mx-5">
+                    {paginationStatus}
+                </span>
                   <span className="text-muted my-2 mx-5">
           {paginationStatus}
         </span>
@@ -205,5 +207,4 @@ const MovieViewPage: React.FC<MovieViewPageProps> = ({
         </div>
     );
 };
-
 export default MovieViewPage;

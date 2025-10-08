@@ -4,11 +4,13 @@ import { Modal, Button } from 'react-bootstrap';
 interface DeleteConfirmModalProps {
     show: boolean;
     onClose: () => void;
-    onDelete:()=>void;
+    onDelete: () => void;
     onConfirm: () => void;
     movieTitle: string;
 }
-const DeleteConfirmModal: React.FC<DeleteConfirmModalProps> = ({ show, onClose, onConfirm, movieTitle }) => {
+
+const DeleteConfirmModal: React.FC<DeleteConfirmModalProps> = ({ show, onClose, onConfirm }) => {
+
     return (
         <Modal show={show} onHide={onClose}>
             <Modal.Header closeButton>
@@ -24,5 +26,4 @@ const DeleteConfirmModal: React.FC<DeleteConfirmModalProps> = ({ show, onClose, 
         </Modal>
     );
 };
-
 export default DeleteConfirmModal;
