@@ -185,6 +185,7 @@ const MovieViewPage: React.FC<MovieViewPageProps> = ({
                     </Col>
                 )}
             </Row>
+
             <div className="d-flex justify-content-end">
                 <Form.Select
                     value={itemsperpage}
@@ -199,6 +200,9 @@ const MovieViewPage: React.FC<MovieViewPageProps> = ({
                 <span className="text-muted my-2 mx-5">
                     {paginationStatus}
                 </span>
+                  <span className="text-muted my-2 mx-5">
+          {paginationStatus}
+        </span>
             </div>
         </div>
     );
