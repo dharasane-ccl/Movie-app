@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import react from "react-select";
 import { v4 as uuidv4 } from 'uuid';
 import Lists from '../moviepage/movie-list';
 import { Movie, User } from "./types";
@@ -235,9 +234,9 @@ const AdminPanel: React.FC = () => {
                 </Col>
                 <Col md={4} className="mb-2 mb-md-0 px-5">
                     <Select
-                        options={genreOptions}
-                        value={selectedGenreOption}
-                        onChange={handleGenreChange}
+                         options={genreOptions}
+                         value={selectedGenreOption}
+                         onChange={handleGenreChange}
                         menuPlacement="auto"
                         menuPortalTarget={document.body}
                         styles={{
