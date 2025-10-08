@@ -11,7 +11,8 @@ interface MovieViewPageProps {
     onToggleFavorite: (id: string) => void;
     onLogout: () => void;
     isFavoritesPage: boolean;
-    pageTitle: string
+    pageTitle: string;
+    genre?:string
 }
 
 const getDisplayName = (user: User | null): string => {

@@ -8,10 +8,16 @@ interface SessionSearchProps {
   selectedGenre: string;
   setSelectedGenre: (genre: string) => void;
 }
-const selectOptions = genres.map(genre => ({
+
+// Create the options array, prepending the 'All Genres' option
+const selectOptions = [
+  { value: "", label: "All Genres" }, // The 'All Genres' option with an empty value
+  ...genres.map(genre => ({
     value: genre.value,
     label: genre.name
-}));
+  }))
+];
+
 const Search: React.FC<SessionSearchProps> = ({
   searchTerm,
   setSearchTerm,
@@ -32,11 +38,11 @@ const Search: React.FC<SessionSearchProps> = ({
         </div>
         <div className="col-12 col-md-2" style={{ width: '300px', marginLeft: "50px" }}>
           <Select
+            placeholder={"All Genres"}
             options={selectOptions}
             value={selectOptions.find(option => option.value === selectedGenre)}
             onChange={(selectedOption) => setSelectedGenre(selectedOption?.value || "")}
-            placeholder="-- Select Genre --"
-            menuPortalTarget={document.body} 
+            menuPortalTarget={document.body}
             styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
           />
         </div>
