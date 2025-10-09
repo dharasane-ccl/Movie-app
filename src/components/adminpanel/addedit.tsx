@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import { Movie, MovieFormErrors } from './types';
@@ -27,10 +26,6 @@ const AddEditMovieModal: React.FC<AddEditMovieModalProps> = ({
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
-        if (formErrors) {
-            console.log("validate")
-            return;
-        }
         onSave();
     };
     return (
@@ -86,7 +81,7 @@ const AddEditMovieModal: React.FC<AddEditMovieModalProps> = ({
                     <Form.Group className="mb-3" controlId="year">
                         <Form.Label>Year <span className='text-danger'>*</span></Form.Label>
                         <Form.Control
-                            type="number"
+                            type="text"
                             name="year"
                             value={movie.year}
                             onChange={onInputChange}
@@ -95,7 +90,7 @@ const AddEditMovieModal: React.FC<AddEditMovieModalProps> = ({
                         <Form.Control.Feedback type="invalid">{formErrors?.year}</Form.Control.Feedback>
                     </Form.Group>
 
-                    <Form.Group className="mb-3" controlId="image" style={{width:'100px',height:'100px'}}>
+                    <Form.Group className="mb-3" controlId="image" >
                         <Form.Label>Image URL</Form.Label>
                         <Form.Control
                             type="text"

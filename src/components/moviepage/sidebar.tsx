@@ -2,7 +2,6 @@ import React, { useEffect, useRef } from 'react';
 import { User } from '../user/types';
 import { Link, useLocation } from 'react-router-dom';
 import "bootstrap-icons/font/bootstrap-icons.css";
-import { relative } from 'path';
 
 interface SidebarProps {
   onLogout: () => void;
@@ -10,7 +9,6 @@ interface SidebarProps {
   setSidebarOpen: (open: boolean) => void;
   currentUser: User | null;
 }
-
 const Sidebar: React.FC<SidebarProps> = ({
   sidebarOpen,
   setSidebarOpen,
@@ -53,7 +51,7 @@ const Sidebar: React.FC<SidebarProps> = ({
 
       <Link
         to="/movie/favorites"
-        className={`nav-link text-black mb-2 my-3 p-3 no-focus-outline ${location.pathname === '/movie/favorites' ? 'bg-success text-white' : 'bg-white'}`}
+        className={`nav-link text-black mb-2  p-3 no-focus-outline ${location.pathname === '/movie/favorites' ? 'bg-success text-white' : 'bg-white'}`}
         onClick={() => setSidebarOpen(false)}
       >
         <div className="d-flex align-items-center">
@@ -66,31 +64,31 @@ const Sidebar: React.FC<SidebarProps> = ({
 
   return (
     <>
-      <nav className="navbar navbar-light d-xxl-none">
-        <div className="container  ">
+      <nav className="navbar navbar-light d-xxl-none  bg-white">
+        <div className="container bg-white">
           <button
             className="btn btn-white border-rounded"
             type="button"
-            onClick={() => setSidebarOpen(!sidebarOpen)}
+            onClick={() => setSidebarOpen(true)}
             style={{
-             position: 'fixed',
+              position: 'fixed',
               zIndex: 1040,
               top: '0px',
-              left: '17px',
-              backgroundColor: 'transparent',
+              left: '0px',
+              backgroundColor: 'white',
+              paddingRight: '500px',
               border: 'none',
               fontSize: '20px',
               color: 'black',
             }}
-          > 
+          >
             ☰
           </button>
         </div>
       </nav>
-
       {sidebarOpen && (
         <div
-          className="sidebar-backdrop d-xxl-none"
+          className="sidebar-backdrop d-xxl-none "
           onClick={() => setSidebarOpen(false)}
           style={{
             position: 'fixed',
@@ -103,7 +101,6 @@ const Sidebar: React.FC<SidebarProps> = ({
           }}
         />
       )}
-
       <div
         ref={sidebarRef}
         className={`bg-white shadow vh-100 p-3 position-fixed top-0 start-0 ${sidebarOpen ? 'd-block' : 'd-none'} d-xxl-none`}
@@ -115,13 +112,12 @@ const Sidebar: React.FC<SidebarProps> = ({
           transform: sidebarOpen ? 'translateX(0)' : 'translateX(-100%)',
         }}
       >
-        <div className="d-flex align-items-center mb-4 ">
+        <div className="d-flex align-items-center mb-4 mt-5 my-5" >
           <img src="assets/logo.png" alt="Just Watch Logo" className="me-2" />
           {sidebarOpen && <span className="fw-bold fs-4">Just Watch</span>}
         </div>
 
         {commonLinks}
-
         {currentUser?.type === 1 && (
           <Link
             to="/admin"

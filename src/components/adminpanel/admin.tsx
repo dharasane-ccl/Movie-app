@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import react from "react-select";
 import { v4 as uuidv4 } from 'uuid';
 import Lists from '../moviepage/movie-list';
 import { Movie, User } from "./types";
@@ -12,6 +11,7 @@ import ViewMovieModal from './viewmodal';
 import DeleteConfirmModal from './delete';
 import { title } from 'process';
 import Select from "react-select";
+import { toast } from 'react-toastify';
 
 interface MovieFormErrors {
     user?: User;
@@ -75,9 +75,18 @@ const AdminPanel: React.FC = () => {
         setFilterGenre(option.value);
     };
 
+
     function handleInputChange(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>): void {
         const { name, value } = e.target;
-        const processedValue = name === 'year' ? parseInt(value) || 0 : value;
+        let processedValue: string | number = value;
+
+
+        if (name === 'year') {
+            const sanitizedValue = value.replace(/[^0-9]/g, '');
+            processedValue = sanitizedValue === '' ? '' : parseInt(sanitizedValue) || 0;
+        } else {
+            processedValue = value;
+        }
 
         if (editingMovie) {
             setEditingMovie({ ...editingMovie, [name]: processedValue });
@@ -118,7 +127,15 @@ const AdminPanel: React.FC = () => {
         if (!movie.title.trim()) errors.title = 'Title is required.';
         if (!movie.description.trim()) errors.description = 'Description is required.';
         if (!movie.genre.trim()) errors.genre = 'Genre is required.';
-        if (!movie.year || movie.year <= 0 || isNaN(movie.year)) errors.year = 'Year must be a positive number.';
+        const currentYear = new Date().getFullYear();
+        const minYear = 1888;
+        if (!movie.year) {
+            errors.year = 'Year is required.';
+        } else if (isNaN(Number(movie.year))) {
+            errors.year = 'Year must be a number.';
+        } else if (Number(movie.year) < minYear || Number(movie.year) > currentYear) {
+            errors.year = `Year must be between ${minYear} and ${currentYear}.`;
+        }
         if (movie.targetUrl && !/^(ftp|http|https):\/\/[^ "]+$/.test(movie.targetUrl)) errors.targetUrl = 'Invalid Target URL format.';
         return errors;
     }, []);
@@ -128,10 +145,17 @@ const AdminPanel: React.FC = () => {
         if (Object.keys(errors).length > 0) {
             setAddFormErrors(errors);
             return;
+        } const isTitleTaken = movies.some(movie => movie.title === newMovie.title);
+
+        if (isTitleTaken) {
+            setAddFormErrors({ ...errors, title: "A movie title already exists" });
+            return;
         }
+
         setMovies(prevMovies => [{ ...newMovie, _id: uuidv4() }, ...prevMovies]);
         setCurrentPage(1)
         handleCloseAddModal();
+        toast.success(`Movie "${newMovie.title}" added successfully!`, { position: "top-right", className:"bg-success text-white" });
     };
 
     const handleUpdate = () => {
@@ -143,12 +167,20 @@ const AdminPanel: React.FC = () => {
         }
         setMovies(prevMovies => prevMovies.map(m => m._id === editingMovie._id ? editingMovie : m));
         handleCloseEditModal();
+         toast.success(`Movie "${editingMovie.title}" updated successfully!`, { position: "top-right", className:"bg-success text-white" });
     };
 
-    const handleDelete = (id: string) => {
-        setMovies(prevMovies => prevMovies.filter(m => m._id !== id));
+   const handleDelete = (deletingMovieId: string) => {
+        if (!deletingMovieId) return;
+
+        const movieTitle = movies.find(m => m._id === deletingMovieId)?.title;
+        setMovies(prevMovies => prevMovies.filter(m => m._id !== deletingMovieId));
+        
         handleCloseDeleteConfirmModal();
+        
+        toast.success(`Movie "${movieTitle}" deleted successfully.`, { position: "top-right", className:"bg-success text-white" });
     };
+
 
     const handleCloseAddModal = () => {
         setShowAddModal(false);
@@ -188,9 +220,10 @@ const AdminPanel: React.FC = () => {
         localStorage.removeItem('currentUser');
         setUser(null);
         setShowUserInfo(false);
+       
     };
     return (
-        <div className="container mt-4">
+          <div className="container mt-4">
             {isLoading ? (
                 <div className="position-fixed top-5 end-0 m-2 mx-5" style={{ zIndex: 1050 }}>
                     Loading...
@@ -204,11 +237,11 @@ const AdminPanel: React.FC = () => {
                     {getDisplayName(user)?.charAt(0).toUpperCase()}
                     {showUserInfo && (
                         <div
-                            className="position-absolute bg-white shadow p-2 rounded end-0"
+                            className="position-absolute bg-white shadow p-2 py-4 rounded end-0"
                             style={{ top: "50px", minWidth: "100px", zIndex: 1060 }}
                         >
-                            <div className="fw-bold">{getDisplayName(user)}</div>
-                            <div className="text-muted">{user.email}</div>
+                            <div className="fw-bold py-1 mb-0 text-black">{getDisplayName(user)}</div>
+                           
                             <button
                                 className="btn btn-sm btn-link text-danger w-100 mt-2"
                                 onClick={onLogout}
@@ -222,9 +255,9 @@ const AdminPanel: React.FC = () => {
                 <div className="position-fixed top-5 end-0 m-2 mx-5" style={{ zIndex: 1050 }}>
                 </div>
             )}
-            <h2 className="mb-4">Admin Page</h2>
-            <Row className="mb-4 align-items-center">
-                <Col md={4} className="mb-2 mb-md-0 px-5">
+            <h2 className="mb-4">Master Movies</h2>
+            <Row className="mb-4 align-items-center" >
+                <Col md={4} className="mb-2 mb-md-0 px-5" style={{ marginLeft: '0px' }}>
                     <input
                         type="text"
                         className="form-control"
@@ -233,7 +266,7 @@ const AdminPanel: React.FC = () => {
                         onChange={(e) => setSearchTerm(e.target.value)}
                     />
                 </Col>
-                <Col md={4} className="mb-2 mb-md-0 px-5">
+                <Col md={4} className="mb-2 mb-md-0 px-5" >
                     <Select
                         options={genreOptions}
                         value={selectedGenreOption}
