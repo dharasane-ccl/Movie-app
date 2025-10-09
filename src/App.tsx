@@ -81,7 +81,7 @@ function App() {
                       width: '100%',
                       height: '100%',
                       zIndex: 1020,
-                      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+
                       cursor: 'pointer',
                     }}
                   />
@@ -153,7 +153,6 @@ function App() {
                       width: '100%',
                       height: '100%',
                       zIndex: 1020,
-                      backgroundColor: 'rgba(0, 0, 0, 0.5)',
                       cursor: 'pointer',
                     }}
                   />

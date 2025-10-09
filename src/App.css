@@ -1,0 +1,61 @@
+// Assuming this is within your form component
+
+const [movie, setMovie] = useState({
+  year: '',
+  // ... other movie properties
+});
+
+const [formErrors, setFormErrors] = useState({});
+
+const onInputChange = (e) => {
+  const { name, value } = e.target;
+  let newValue = value;
+
+  // Perform validation specifically for the 'year' field
+  if (name === 'year') {
+    // Restrict input to only digits and prevent "e" or other non-numeric chars
+    const sanitizedValue = value.replace(/[^0-9]/g, '');
+    newValue = sanitizedValue;
+
+    // Perform validation for a realistic year range
+    const currentYear = new Date().getFullYear();
+    const minYear = 1888; // The year the first known film was made
+
+    const newErrors = { ...formErrors };
+    
+    // Check if the field is empty
+    if (!newValue.trim()) {
+      newErrors.year = 'Year is required.';
+    } 
+    // Check if the input contains only numbers
+    else if (isNaN(Number(newValue))) {
+      newErrors.year = 'Year must be a number.';
+    }
+    // Check for a valid year range
+    else if (Number(newValue) < minYear || Number(newValue) > currentYear) {
+      newErrors.year = `Year must be between ${minYear} and ${currentYear}.`;
+    } 
+    // If all checks pass, clear the error
+    else {
+      delete newErrors.year;
+    }
+
+    setFormErrors(newErrors);
+  }
+
+  // Update the movie state with the sanitized value for the year
+  setMovie({ ...movie, [name]: newValue });
+};
+
+// ... inside your component's JSX
+<Form.Group className="mb-3" controlId="year">
+  <Form.Label>Year <span className='text-danger'>*</span></Form.Label>
+  <Form.Control
+    type="text" // Use "text" to better control input, type="number" has quirks
+    name="year"
+    value={movie.year}
+    onChange={onInputChange}
+    isInvalid={!!formErrors?.year}
+  />
+  <Form.Control.Feedback type="invalid">{formErrors?.year}</Form.Control.Feedback>
+</Form.Group>

@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { Card, Row, Col, Form } from "react-bootstrap";
+import { Card, Row, Col, Form, Pagination } from "react-bootstrap";
 import { User, Movie } from "../user/types";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import Search from './search';
@@ -12,7 +12,7 @@ interface MovieViewPageProps {
     onLogout: () => void;
     isFavoritesPage: boolean;
     pageTitle: string;
-    genre?:string
+    genre?: string
 }
 
 const getDisplayName = (user: User | null): string => {
@@ -98,20 +98,19 @@ const MovieViewPage: React.FC<MovieViewPageProps> = ({
         <div className="container my-5">
             {user && (
                 <div
-                    className="position-fixed top-0 end-0 m-2 mx-5 rounded-circle bg-success text-white d-flex justify-content-center align-items-center "
+                    className="position-fixed top-0 end-0 m-2 mx-5 rounded-circle bg-success text-white d-flex justify-content-center align-items-center"
                     style={{ width: "40px", height: "40px", fontSize: "18px", cursor: "pointer", zIndex: 1050 }}
                     onClick={() => setShowUserInfo(!showUserInfo)}
-                >
-                    {getDisplayName(user)?.charAt(0).toUpperCase()}
+                > {getDisplayName(user)?.charAt(0).toUpperCase()}
                     {showUserInfo && (
                         <div
                             className="position-absolute bg-white shadow p-2 rounded end-0"
-                            style={{ top: "50px", minWidth: "100px", zIndex: 1060 }}
+                            style={{ top: "50px", minWidth: "40px", height: "110px", right: "0px",marginTop:'0px',marginBottom:'0px' }}
                         >
-                            <div className="fw-bold">{getDisplayName(user)}</div>
-                            <div className="text-muted">{user.first_name}</div>
+                            <div className="fw-bold small mb-0 mt-0  " style={{marginTop:'0px'}}>{getDisplayName(user)}</div>
+                            <div className="text-muted small mb-1 mt-0">{user.first_name}</div>
                             <button
-                                className="btn btn-sm btn-link text-danger w-100 mt-2"
+                                className="btn btn-sm btn-link text-danger w-100 mt-0"
                                 onClick={onLogout}
                             >
                                 Logout
@@ -193,17 +192,31 @@ const MovieViewPage: React.FC<MovieViewPageProps> = ({
                     onChange={(e) => setItemsPerPage(Number(e.target.value))}
                     style={{ width: '67px' }}
                 >
-                    <option value="4">4 </option>
-                    <option value="6">6 </option>
-                    <option value="10">10 </option>
-                    <option value="18">18</option>
+                    <option value="5">5 </option>
+                    <option value="10">10</option>
+                    <option value="50">50 </option>
+                    <option value="100">100</option>
                 </Form.Select>
                 <span className="text-muted my-2 mx-5">
                     {paginationStatus}
                 </span>
-                  <span className="text-muted my-2 mx-5">
-          {paginationStatus}
-        </span>
+
+                <Pagination className='lusdt' >
+                    <Pagination.Prev
+                        onClick={() => handlePageChange(currentPage - 1)}
+                        disabled={currentPage === 1}
+                        aria-label='previous'
+                    >
+                        <i className="bi bi-caret-left-fill" aria-hidden="true"></i>
+                    </Pagination.Prev>
+                    <Pagination.Next
+                        onClick={() => handlePageChange(currentPage + 1)}
+                        disabled={currentPage === totalPages}
+                        aria-label='Next'
+                    >
+                        <i className="bi bi-caret-right-fill" aria-hidden="true"></i>
+                    </Pagination.Next>
+                </Pagination>
             </div>
         </div>
     );

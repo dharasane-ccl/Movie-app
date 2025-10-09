@@ -66,31 +66,31 @@ const Sidebar: React.FC<SidebarProps> = ({
 
   return (
     <>
-      <nav className="navbar navbar-light d-xxl-none">
-        <div className="container  ">
+      <nav className="navbar navbar-light d-xxl-none  bg-white">
+        <div className="container bg-black">
           <button
             className="btn btn-white border-rounded"
             type="button"
-            onClick={() => setSidebarOpen(!sidebarOpen)}
+            onClick={() => setSidebarOpen(true)}
             style={{
-             position: 'fixed',
+              position: 'fixed',
               zIndex: 1040,
               top: '0px',
-              left: '17px',
+              left: '0px',
               backgroundColor: 'transparent',
+              paddingRight:'500px',
               border: 'none',
               fontSize: '20px',
               color: 'black',
             }}
-          > 
+          >
             ☰
           </button>
         </div>
       </nav>
-
       {sidebarOpen && (
         <div
-          className="sidebar-backdrop d-xxl-none"
+          className="sidebar-backdrop d-xxl-none "
           onClick={() => setSidebarOpen(false)}
           style={{
             position: 'fixed',
@@ -103,22 +103,24 @@ const Sidebar: React.FC<SidebarProps> = ({
           }}
         />
       )}
+   <div
+  ref={sidebarRef}
+  className={`bg-white shadow vh-100 p-3 position-fixed top-0 start-0 ${sidebarOpen ? 'd-block' : 'd-none'} d-xxl-none`}
+  style={{
+    width: sidebarOpen ? '210px' : '0px',
+    height: '100%',
+    zIndex: 1030,
+    transition: 'transform 0.3s ease-in-out',
+    transform: sidebarOpen ? 'translateX(0)' : 'translateX(-100%)',
+  }}
+>
+  {/* The inline style has been removed from this div */}
+  <div className="d-flex align-items-center mb-4 mt-5 my-5">
+    <img src="assets/logo.png" alt="Just Watch Logo" className="me-2" />
+    {sidebarOpen && <span className="fw-bold fs-4">Just Watch</span>}
+  </div>
+  
 
-      <div
-        ref={sidebarRef}
-        className={`bg-white shadow vh-100 p-3 position-fixed top-0 start-0 ${sidebarOpen ? 'd-block' : 'd-none'} d-xxl-none`}
-        style={{
-          width: sidebarOpen ? '210px' : '0px',
-          height: '100%',
-          zIndex: 1030,
-          transition: 'transform 0.3s ease-in-out',
-          transform: sidebarOpen ? 'translateX(0)' : 'translateX(-100%)',
-        }}
-      >
-        <div className="d-flex align-items-center mb-4 ">
-          <img src="assets/logo.png" alt="Just Watch Logo" className="me-2" />
-          {sidebarOpen && <span className="fw-bold fs-4">Just Watch</span>}
-        </div>
 
         {commonLinks}
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Movie } from './types';
-import { Button, Form } from 'react-bootstrap';
+import { Button, Form, Pagination } from 'react-bootstrap';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
 interface MovieTableProps {
@@ -14,7 +14,7 @@ const MovieTable: React.FC<MovieTableProps> = ({ movies, onEdit, onView, onDelet
 
   const [itemsPerPage, setItemsPerPage] = useState(6)
   const [currentPage, setCurrentPage] = useState(1);
-  const [filterterm, setFiltreTerm] = useState('')
+  const [filterterm] = useState('')
 
   const filteredMovies = useMemo(() => {
     return movies.filter(movie =>
@@ -46,6 +46,10 @@ const MovieTable: React.FC<MovieTableProps> = ({ movies, onEdit, onView, onDelet
   useEffect(() => {
     setCurrentPage(1);
   }, [filterterm, itemsPerPage]);
+
+  const handlePageChange = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+  };
 
   return (
     <div className="table-responsive">
@@ -116,10 +120,25 @@ const MovieTable: React.FC<MovieTableProps> = ({ movies, onEdit, onView, onDelet
           <option value="50">50 </option>
           <option value="100">100</option>
         </Form.Select>
-
         <span className="text-muted my-2 mx-5">
           {paginationStatus}
         </span>
+        <Pagination >
+          <Pagination.Prev
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+            aria-label="Previous"
+          >
+            <i className="bi bi-caret-left-fill" aria-hidden="true"></i>
+          </Pagination.Prev>
+          <Pagination.Next
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === totalPages}
+            aria-label="Next"
+          >
+            <i className="bi bi-caret-right-fill" aria-hidden="true"></i>
+          </Pagination.Next>
+        </Pagination>
       </div>
     </div>
   );

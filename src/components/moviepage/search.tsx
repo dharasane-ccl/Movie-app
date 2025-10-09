@@ -27,7 +27,7 @@ const Search: React.FC<SessionSearchProps> = ({
   return (
     <div className="container">
       <div className="row g-2 mb-3 align-items-center">
-        <div className="col-12 col-lg-5 col-md-3" style={{ width: '300px', marginLeft: "50px" }}>
+        <div className="col-12 col-lg-5 col-md-3" style={{ width: '300px' }}>
           <input
             type="text"
             className="form-control"
@@ -36,7 +36,7 @@ const Search: React.FC<SessionSearchProps> = ({
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-        <div className="col-12 col-md-2" style={{ width: '300px', marginLeft: "50px" }}>
+        <div className="col-12 col-md-2" style={{ width: '300px' }}>
           <Select
             placeholder={"All Genres"}
             options={selectOptions}

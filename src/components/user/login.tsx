@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import usersData from "./users.json";
 import { User } from './types';
+import { Toast } from 'react-bootstrap';
+import { toast } from 'react-toastify';
 
 interface LoginPageProps {
   setIsAuthenticated: (isAuthenticated: boolean) => void;
@@ -30,12 +32,12 @@ const LoginPage: React.FC<LoginPageProps> = ({ setIsAuthenticated, setUser }) =>
     const newErrors: { email?: string; password?: string } = {};
     if (!email) {
       newErrors.email = "Email is required";
-    } else if (!email.includes("@") || !email.includes(".")) {
+    } else if (!email.includes("@") || !email.includes(".com")) {
       newErrors.email = "Enter a valid email";
     }
     if (!password) {
       newErrors.password = "Password is required";
-    } else if (password.length < 6) {
+    } else if (password.length < 6 || !password) {
       newErrors.password = "Password must be at least 6 characters";
     }
     setErrors(newErrors);
@@ -49,16 +51,22 @@ const LoginPage: React.FC<LoginPageProps> = ({ setIsAuthenticated, setUser }) =>
     const foundUser = usersData.find(
       (u: any) => u.email === email && u.password === password
     );
+    setErrors({})
+
     if (foundUser) {
       localStorage.setItem('isLoggedIn', 'true');
       localStorage.setItem('currentUser', JSON.stringify(foundUser));
       setIsAuthenticated(true);
       setUser(foundUser as User);
+
       if (foundUser.type === 1) {
         navigate('/admin');
       } else {
         navigate('/movie');
       }
+         toast.success(`Login successful, ${foundUser.email}!`);
+    } else {
+      setErrors({ password: "Invalid password" })
     }
     if (foundUser) {
       localStorage.setItem('isLoggedIn', 'true');

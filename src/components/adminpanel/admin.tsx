@@ -74,9 +74,18 @@ const AdminPanel: React.FC = () => {
         setFilterGenre(option.value);
     };
 
+
     function handleInputChange(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>): void {
         const { name, value } = e.target;
-        const processedValue = name === 'year' ? parseInt(value) || 0 : value;
+        let processedValue: string | number = value;
+
+
+        if (name === 'year') {
+            const sanitizedValue = value.replace(/[^0-9]/g, '');
+            processedValue = sanitizedValue === '' ? '' : parseInt(sanitizedValue) || 0;
+        } else {
+            processedValue = value;
+        }
 
         if (editingMovie) {
             setEditingMovie({ ...editingMovie, [name]: processedValue });
@@ -117,7 +126,15 @@ const AdminPanel: React.FC = () => {
         if (!movie.title.trim()) errors.title = 'Title is required.';
         if (!movie.description.trim()) errors.description = 'Description is required.';
         if (!movie.genre.trim()) errors.genre = 'Genre is required.';
-        if (!movie.year || movie.year <= 0 || isNaN(movie.year)) errors.year = 'Year must be a positive number.';
+        const currentYear = new Date().getFullYear();
+        const minYear = 1888;
+        if (!movie.year) {
+            errors.year = 'Year is required.';
+        } else if (isNaN(Number(movie.year))) {
+            errors.year = 'Year must be a number.';
+        } else if (Number(movie.year) < minYear || Number(movie.year) > currentYear) {
+            errors.year = `Year must be between ${minYear} and ${currentYear}.`;
+        }
         if (movie.targetUrl && !/^(ftp|http|https):\/\/[^ "]+$/.test(movie.targetUrl)) errors.targetUrl = 'Invalid Target URL format.';
         return errors;
     }, []);
@@ -127,7 +144,13 @@ const AdminPanel: React.FC = () => {
         if (Object.keys(errors).length > 0) {
             setAddFormErrors(errors);
             return;
+        } const isTitleTaken = movies.some(movie => movie.title === newMovie.title);
+
+        if (isTitleTaken) {
+            setAddFormErrors({ ...errors, title: "A movie title already exists" });
+            return;
         }
+
         setMovies(prevMovies => [{ ...newMovie, _id: uuidv4() }, ...prevMovies]);
         setCurrentPage(1)
         handleCloseAddModal();
@@ -189,27 +212,33 @@ const AdminPanel: React.FC = () => {
         setShowUserInfo(false);
     };
     return (
-        <div className="container mt-4">
+        <div className="container my-5">
             {isLoading ? (
-                <div className="position-fixed top-5 end-0 m-2 mx-5" style={{ zIndex: 1050 }}>
+                <div className="position-fixed top-0 end-0 m-2 mx-5" style={{ zIndex: 1050 }}>
                     Loading...
                 </div>
             ) : user ? (
                 <div
-                    className="position-fixed top-5 end-0 m-2 mx-5 rounded-circle bg-success text-white d-flex justify-content-center align-items-center"
-                    style={{ width: "40px", height: "40px", fontSize: "18px", cursor: "pointer", zIndex: 1050 }}
+                    className="position-absolute bg-white shadow p-2 rounded end-0"
+                    style={{
+                        top: "50px",
+                        minWidth: "40px",
+                        height: "110px",
+                        right: "0px",
+                        marginTop: '0px',
+                        marginBottom: '0px',
+                    }}
                     onClick={() => setShowUserInfo(!showUserInfo)}
-                >
-                    {getDisplayName(user)?.charAt(0).toUpperCase()}
+                > {getDisplayName(user)?.charAt(0).toUpperCase()}
                     {showUserInfo && (
                         <div
                             className="position-absolute bg-white shadow p-2 rounded end-0"
-                            style={{ top: "50px", minWidth: "100px", zIndex: 1060 }}
+                            style={{ top: "50px", minWidth: "40px", height: "110px", right: "0px", marginTop: '0px', marginBottom: '0px' }}
                         >
-                            <div className="fw-bold">{getDisplayName(user)}</div>
-                            <div className="text-muted">{user.email}</div>
+                            <div className="fw-bold small mb-0 mt-0  " style={{ marginTop: '0px' }}>{getDisplayName(user)}</div>
+                            <div className="text-muted small mb-1 mt-0">{user.first_name}</div>
                             <button
-                                className="btn btn-sm btn-link text-danger w-100 mt-2"
+                                className="btn btn-sm btn-link text-danger w-100 mt-0"
                                 onClick={onLogout}
                             >
                                 Logout
@@ -218,12 +247,12 @@ const AdminPanel: React.FC = () => {
                     )}
                 </div>
             ) : (
-                <div className="position-fixed top-5 end-0 m-2 mx-5" style={{ zIndex: 1050 }}>
+                <div className="position-fixed top-0 end-0 m-2 mx-5" style={{ zIndex: 1050 }}>
                 </div>
             )}
             <h2 className="mb-4">Admin Page</h2>
-            <Row className="mb-4 align-items-center">
-                <Col md={4} className="mb-2 mb-md-0 px-5">
+            <Row className="mb-4 align-items-center" >
+                <Col md={4} className="mb-2 mb-md-0 px-5" style={{ marginLeft: '0px' }}>
                     <input
                         type="text"
                         className="form-control"
@@ -232,11 +261,11 @@ const AdminPanel: React.FC = () => {
                         onChange={(e) => setSearchTerm(e.target.value)}
                     />
                 </Col>
-                <Col md={4} className="mb-2 mb-md-0 px-5">
+                <Col md={4} className="mb-2 mb-md-0 px-5" >
                     <Select
-                         options={genreOptions}
-                         value={selectedGenreOption}
-                         onChange={handleGenreChange}
+                        options={genreOptions}
+                        value={selectedGenreOption}
+                        onChange={handleGenreChange}
                         menuPlacement="auto"
                         menuPortalTarget={document.body}
                         styles={{
