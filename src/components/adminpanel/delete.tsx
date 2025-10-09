@@ -1,12 +1,14 @@
 import React from 'react';
 import { Modal, Button } from 'react-bootstrap';
 
+
 interface DeleteConfirmModalProps {
     show: boolean;
     onClose: () => void;
     onDelete: () => void;
     onConfirm: () => void;
     movieTitle: string;
+
 }
 
 const DeleteConfirmModal: React.FC<DeleteConfirmModalProps> = ({ show, onClose, onConfirm }) => {

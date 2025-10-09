@@ -11,6 +11,7 @@ import ViewMovieModal from './viewmodal';
 import DeleteConfirmModal from './delete';
 import { title } from 'process';
 import Select from "react-select";
+import { toast } from 'react-toastify';
 
 interface MovieFormErrors {
     user?: User;
@@ -154,6 +155,7 @@ const AdminPanel: React.FC = () => {
         setMovies(prevMovies => [{ ...newMovie, _id: uuidv4() }, ...prevMovies]);
         setCurrentPage(1)
         handleCloseAddModal();
+        toast.success(`Movie "${newMovie.title}" added successfully!`, { position: "top-right", className:"bg-success text-white" });
     };
 
     const handleUpdate = () => {
@@ -165,12 +167,20 @@ const AdminPanel: React.FC = () => {
         }
         setMovies(prevMovies => prevMovies.map(m => m._id === editingMovie._id ? editingMovie : m));
         handleCloseEditModal();
+         toast.success(`Movie "${editingMovie.title}" updated successfully!`, { position: "top-right", className:"bg-success text-white" });
     };
 
-    const handleDelete = (id: string) => {
-        setMovies(prevMovies => prevMovies.filter(m => m._id !== id));
+   const handleDelete = (deletingMovieId: string) => {
+        if (!deletingMovieId) return;
+
+        const movieTitle = movies.find(m => m._id === deletingMovieId)?.title;
+        setMovies(prevMovies => prevMovies.filter(m => m._id !== deletingMovieId));
+        
         handleCloseDeleteConfirmModal();
+        
+        toast.success(`Movie "${movieTitle}" deleted successfully.`, { position: "top-right", className:"bg-success text-white" });
     };
+
 
     const handleCloseAddModal = () => {
         setShowAddModal(false);
@@ -210,35 +220,30 @@ const AdminPanel: React.FC = () => {
         localStorage.removeItem('currentUser');
         setUser(null);
         setShowUserInfo(false);
+       
     };
     return (
-        <div className="container my-5">
+          <div className="container mt-4">
             {isLoading ? (
-                <div className="position-fixed top-0 end-0 m-2 mx-5" style={{ zIndex: 1050 }}>
+                <div className="position-fixed top-5 end-0 m-2 mx-5" style={{ zIndex: 1050 }}>
                     Loading...
                 </div>
             ) : user ? (
                 <div
-                    className="position-absolute bg-white shadow p-2 rounded end-0"
-                    style={{
-                        top: "50px",
-                        minWidth: "40px",
-                        height: "110px",
-                        right: "0px",
-                        marginTop: '0px',
-                        marginBottom: '0px',
-                    }}
+                    className="position-fixed top-5 end-0 m-2 mx-5 rounded-circle bg-success text-white d-flex justify-content-center align-items-center"
+                    style={{ width: "40px", height: "40px", fontSize: "18px", cursor: "pointer", zIndex: 1050 }}
                     onClick={() => setShowUserInfo(!showUserInfo)}
-                > {getDisplayName(user)?.charAt(0).toUpperCase()}
+                >
+                    {getDisplayName(user)?.charAt(0).toUpperCase()}
                     {showUserInfo && (
                         <div
-                            className="position-absolute bg-white shadow p-2 rounded end-0"
-                            style={{ top: "50px", minWidth: "40px", height: "110px", right: "0px", marginTop: '0px', marginBottom: '0px' }}
+                            className="position-absolute bg-white shadow p-2 py-4 rounded end-0"
+                            style={{ top: "50px", minWidth: "100px", zIndex: 1060 }}
                         >
-                            <div className="fw-bold small mb-0 mt-0  " style={{ marginTop: '0px' }}>{getDisplayName(user)}</div>
-                            <div className="text-muted small mb-1 mt-0">{user.first_name}</div>
+                            <div className="fw-bold py-1 mb-0 text-black">{getDisplayName(user)}</div>
+                           
                             <button
-                                className="btn btn-sm btn-link text-danger w-100 mt-0"
+                                className="btn btn-sm btn-link text-danger w-100 mt-2"
                                 onClick={onLogout}
                             >
                                 Logout
@@ -247,10 +252,10 @@ const AdminPanel: React.FC = () => {
                     )}
                 </div>
             ) : (
-                <div className="position-fixed top-0 end-0 m-2 mx-5" style={{ zIndex: 1050 }}>
+                <div className="position-fixed top-5 end-0 m-2 mx-5" style={{ zIndex: 1050 }}>
                 </div>
             )}
-            <h2 className="mb-4">Admin Page</h2>
+            <h2 className="mb-4">Master Movies</h2>
             <Row className="mb-4 align-items-center" >
                 <Col md={4} className="mb-2 mb-md-0 px-5" style={{ marginLeft: '0px' }}>
                     <input

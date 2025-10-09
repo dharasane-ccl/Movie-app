@@ -14,7 +14,6 @@ interface MovieViewPageProps {
     pageTitle: string;
     genre?: string
 }
-
 const getDisplayName = (user: User | null): string => {
     if (!user) return "";
     const name = [user.first_name, user.last_name].filter(Boolean).join(" ").trim();
@@ -23,8 +22,8 @@ const getDisplayName = (user: User | null): string => {
 
 const MovieViewPage: React.FC<MovieViewPageProps> = ({
     user,
-    onToggleFavorite,
     movielists,
+    onToggleFavorite,
     onLogout,
     pageTitle,
 }) => {
@@ -69,6 +68,7 @@ const MovieViewPage: React.FC<MovieViewPageProps> = ({
                 movie.genre?.toLowerCase() === lowerGenreFilter
             );
         }
+       
         return lists;
     }, [movielists, searchTerm, selectedGenre]);
     useEffect(() => {
@@ -104,11 +104,11 @@ const MovieViewPage: React.FC<MovieViewPageProps> = ({
                 > {getDisplayName(user)?.charAt(0).toUpperCase()}
                     {showUserInfo && (
                         <div
-                            className="position-absolute bg-white shadow p-2 rounded end-0"
-                            style={{ top: "50px", minWidth: "40px", height: "110px", right: "0px",marginTop:'0px',marginBottom:'0px' }}
+                            className="position-absolute bg-white shadow p-2 py-4 rounded end-0"
+                            style={{ top: "50px", minWidth: "40px", height: "110px", right: "0px", marginTop: '0px', marginBottom: '0px' }}
                         >
-                            <div className="fw-bold small mb-0 mt-0  " style={{marginTop:'0px'}}>{getDisplayName(user)}</div>
-                            <div className="text-muted small mb-1 mt-0">{user.first_name}</div>
+                            <div className="fw-bold py-1 mb-0 text-black " style={{ marginTop: '0px' }}>{getDisplayName(user)}</div>
+
                             <button
                                 className="btn btn-sm btn-link text-danger w-100 mt-0"
                                 onClick={onLogout}
@@ -158,6 +158,7 @@ const MovieViewPage: React.FC<MovieViewPageProps> = ({
                                             e.preventDefault();
                                             e.stopPropagation();
                                             onToggleFavorite(movie._id)
+
                                         }
                                         }
                                         style={{
@@ -222,3 +223,4 @@ const MovieViewPage: React.FC<MovieViewPageProps> = ({
     );
 };
 export default MovieViewPage;
+

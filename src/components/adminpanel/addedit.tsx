@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import { Movie, MovieFormErrors } from './types';

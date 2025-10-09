@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import usersData from "./users.json";
 import { User } from './types';
-import { Toast } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 
 interface LoginPageProps {
@@ -64,7 +63,10 @@ const LoginPage: React.FC<LoginPageProps> = ({ setIsAuthenticated, setUser }) =>
       } else {
         navigate('/movie');
       }
-         toast.success(`Login successful, ${foundUser.email}!`);
+        toast.success(`Login successful, ${foundUser.first_name}!`, {
+        position: "top-right",  className:"bg-success text-white"
+    });
+
     } else {
       setErrors({ password: "Invalid password" })
     }
@@ -73,7 +75,6 @@ const LoginPage: React.FC<LoginPageProps> = ({ setIsAuthenticated, setUser }) =>
       localStorage.setItem('currentUser', JSON.stringify(foundUser));
     }
   };
-
   return (
     <div className="container d-flex justify-content-center align-items-center vh-100">
       <div className="card shadow p-5" style={{ maxWidth: "500px", width: "100%" }}>

@@ -109,7 +109,6 @@ const MovieTable: React.FC<MovieTableProps> = ({ movies, onEdit, onView, onDelet
         </tbody>
       </table>
       <div className="d-flex justify-content-end">
-
         <Form.Select
           value={itemsPerPage}
           onChange={(e) => setItemsPerPage(Number(e.target.value))}

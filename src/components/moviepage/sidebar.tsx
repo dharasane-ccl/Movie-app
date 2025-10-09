@@ -2,7 +2,6 @@ import React, { useEffect, useRef } from 'react';
 import { User } from '../user/types';
 import { Link, useLocation } from 'react-router-dom';
 import "bootstrap-icons/font/bootstrap-icons.css";
-import { relative } from 'path';
 
 interface SidebarProps {
   onLogout: () => void;
@@ -10,7 +9,6 @@ interface SidebarProps {
   setSidebarOpen: (open: boolean) => void;
   currentUser: User | null;
 }
-
 const Sidebar: React.FC<SidebarProps> = ({
   sidebarOpen,
   setSidebarOpen,
@@ -53,7 +51,7 @@ const Sidebar: React.FC<SidebarProps> = ({
 
       <Link
         to="/movie/favorites"
-        className={`nav-link text-black mb-2 my-3 p-3 no-focus-outline ${location.pathname === '/movie/favorites' ? 'bg-success text-white' : 'bg-white'}`}
+        className={`nav-link text-black mb-2  p-3 no-focus-outline ${location.pathname === '/movie/favorites' ? 'bg-success text-white' : 'bg-white'}`}
         onClick={() => setSidebarOpen(false)}
       >
         <div className="d-flex align-items-center">
@@ -67,7 +65,7 @@ const Sidebar: React.FC<SidebarProps> = ({
   return (
     <>
       <nav className="navbar navbar-light d-xxl-none  bg-white">
-        <div className="container bg-black">
+        <div className="container bg-white">
           <button
             className="btn btn-white border-rounded"
             type="button"
@@ -77,8 +75,8 @@ const Sidebar: React.FC<SidebarProps> = ({
               zIndex: 1040,
               top: '0px',
               left: '0px',
-              backgroundColor: 'transparent',
-              paddingRight:'500px',
+              backgroundColor: 'white',
+              paddingRight: '500px',
               border: 'none',
               fontSize: '20px',
               color: 'black',
@@ -103,27 +101,23 @@ const Sidebar: React.FC<SidebarProps> = ({
           }}
         />
       )}
-   <div
-  ref={sidebarRef}
-  className={`bg-white shadow vh-100 p-3 position-fixed top-0 start-0 ${sidebarOpen ? 'd-block' : 'd-none'} d-xxl-none`}
-  style={{
-    width: sidebarOpen ? '210px' : '0px',
-    height: '100%',
-    zIndex: 1030,
-    transition: 'transform 0.3s ease-in-out',
-    transform: sidebarOpen ? 'translateX(0)' : 'translateX(-100%)',
-  }}
->
-  {/* The inline style has been removed from this div */}
-  <div className="d-flex align-items-center mb-4 mt-5 my-5">
-    <img src="assets/logo.png" alt="Just Watch Logo" className="me-2" />
-    {sidebarOpen && <span className="fw-bold fs-4">Just Watch</span>}
-  </div>
-  
-
+      <div
+        ref={sidebarRef}
+        className={`bg-white shadow vh-100 p-3 position-fixed top-0 start-0 ${sidebarOpen ? 'd-block' : 'd-none'} d-xxl-none`}
+        style={{
+          width: sidebarOpen ? '210px' : '0px',
+          height: '100%',
+          zIndex: 1030,
+          transition: 'transform 0.3s ease-in-out',
+          transform: sidebarOpen ? 'translateX(0)' : 'translateX(-100%)',
+        }}
+      >
+        <div className="d-flex align-items-center mb-4 mt-5 my-5" >
+          <img src="assets/logo.png" alt="Just Watch Logo" className="me-2" />
+          {sidebarOpen && <span className="fw-bold fs-4">Just Watch</span>}
+        </div>
 
         {commonLinks}
-
         {currentUser?.type === 1 && (
           <Link
             to="/admin"

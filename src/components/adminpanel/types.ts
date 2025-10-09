@@ -1,5 +1,3 @@
-// types.ts
-
 export interface Movie {
     _id: string;
     title: string;
@@ -9,8 +7,7 @@ export interface Movie {
     isFavorite: boolean;
     year: number;
     targetUrl: string; 
- 
-    
+   
 }
 
 export interface User {
@@ -18,7 +15,6 @@ export interface User {
     first_name: string;
     last_name: string;
     email: string;
-    // Add other user properties as needed
 }
 
 export interface MovieFormErrors {
