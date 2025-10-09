@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import usersData from "./users.json";
 import { User } from './types';
+
 import { toast } from 'react-toastify';
 
 interface LoginPageProps {
@@ -63,9 +64,9 @@ const LoginPage: React.FC<LoginPageProps> = ({ setIsAuthenticated, setUser }) =>
       } else {
         navigate('/movie');
       }
-        toast.success(`Login successful, ${foundUser.first_name}!`, {
-        position: "top-right",  className:"bg-success text-white"
-    });
+      toast.success(`Login successful, ${foundUser.first_name}!`, {
+        position: "top-right", className: "bg-success text-white"
+      });
 
     } else {
       setErrors({ password: "Invalid password" })
@@ -85,7 +86,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ setIsAuthenticated, setUser }) =>
         <h2 className="text-center mb-4 fs-5 text-secondary fw-bold mt-3">Welocome To The Just Watch</h2>
         <h6 className='text-secondary text-center'>Please sign in to your account</h6>
         <form onSubmit={handleSubmit} noValidate>
-          <div className='mb-3 mt-3 mx-5 text-start'>
+          <div className='mb-3 mt-3 mx-5  text-start'>
             <label>Email <span className="text-danger">*</span></label>
             <input
               className={`form-control ${errors.email ? 'is-invalid' : ''}`}
@@ -98,26 +99,28 @@ const LoginPage: React.FC<LoginPageProps> = ({ setIsAuthenticated, setUser }) =>
           <div className='mb-3 mt-3 mx-5 text-start'>
             <label>Password <span className="text-danger">*</span></label>
             <div className="input-group">
-              <input
-                className={`form-control ${errors.password ? 'is-invalid' : ''}`}
-                type=
-                {showPassword ? 'text' : 'password'}
-                value={password}
-                onChange={handlePasswordChange}
-              />
-              <button
-                className="btn btn-outline-secondary"
-                type="button"
-                onClick={handleTogglePassword}
-              >
-                <i className={`bi ${showPassword ? 'bi-eye' : 'bi-eye-slash'}`}></i>
-              </button>
-              {errors.password && <div className="invalid-feedback">{errors.password}</div>}
+              <div className="input-group">
+                <input
+                  className={`form-control  ${errors.password ? 'is-invalid' : ''}`}
+                  type=
+                  {showPassword ? 'text' : 'password'}
+                  value={password}
+                  onChange={handlePasswordChange}
+                />
+                <button
+                  className="btn btn-outline-secondary"
+                  type="button"
+                  onClick={handleTogglePassword}
+                >
+                  <i className={`bi ${showPassword ? 'bi-eye' : 'bi-eye-slash'}`}></i>
+                </button>
+                {errors.password && <div className="invalid-feedback">{errors.password}</div>}
+              </div>
             </div>
-          </div>
-          <div className='text-center'>
-            <button type="submit" className="btn btn-primary w-40 mt-3">Login</button>
-          </div>
+            </div>
+            <div className='text-center'>
+              <button type="submit" className="btn btn-primary w-40 mt-3">Login</button>
+            </div>
         </form>
       </div>
     </div>

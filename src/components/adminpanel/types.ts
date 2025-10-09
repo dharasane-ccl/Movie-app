@@ -11,6 +11,7 @@ export interface Movie {
 }
 
 export interface User {
+    employee_code: any;
     _id: string;
     first_name: string;
     last_name: string;

@@ -52,8 +52,8 @@ const MovieTable: React.FC<MovieTableProps> = ({ movies, onEdit, onView, onDelet
   };
 
   return (
-    <div className="table-responsive">
-      <table className="table table-striped table-hover">
+    <div className="table">
+      <table className="table align-middle table-xxl w-100 ">
         <thead>
           <tr>
             <th>S.No</th>
@@ -61,7 +61,6 @@ const MovieTable: React.FC<MovieTableProps> = ({ movies, onEdit, onView, onDelet
             <th>Description</th>
             <th>Year</th>
             <th>Genre</th>
-            <th>Movie Poster</th>
             <th>Movie Url</th>
             <th>Actions</th>
           </tr>
@@ -75,13 +74,6 @@ const MovieTable: React.FC<MovieTableProps> = ({ movies, onEdit, onView, onDelet
               </td>
               <td>{movie.year}</td>
               <td>{movie.genre}</td>
-              <td>
-                {movie.image ? (
-                  <img src={movie.image} alt={movie.title} style={{ width: '100px', height: '100px' }} />
-                ) : (
-                  'No Image'
-                )}
-              </td>
               <td>
                 {movie.targetUrl ? (
                   <a href={movie.targetUrl} target="_blank" rel="noopener noreferrer" className='d-flex'>
@@ -136,10 +128,11 @@ const MovieTable: React.FC<MovieTableProps> = ({ movies, onEdit, onView, onDelet
             aria-label="Next"
           >
             <i className="bi bi-caret-right-fill" aria-hidden="true"></i>
-          </Pagination.Next>
+          </Pagination.Next>  
         </Pagination>
       </div>
     </div>
+    
   );
 };
 export default MovieTable;

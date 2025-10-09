@@ -9,9 +9,8 @@ interface SessionSearchProps {
   setSelectedGenre: (genre: string) => void;
 }
 
-// Create the options array, prepending the 'All Genres' option
 const selectOptions = [
-  { value: "", label: "All Genres" }, // The 'All Genres' option with an empty value
+  { value: "", label: "All Genres" }, 
   ...genres.map(genre => ({
     value: genre.value,
     label: genre.name
@@ -27,7 +26,7 @@ const Search: React.FC<SessionSearchProps> = ({
   return (
     <div className="container">
       <div className="row g-2 mb-3 align-items-center">
-        <div className="col-12 col-lg-5 col-md-3" style={{ width: '300px' }}>
+        <div className="col-12 col-lg-5 col-md-3" style={{ width: '300px'  }}>
           <input
             type="text"
             className="form-control"
