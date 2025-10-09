@@ -132,7 +132,6 @@ const Sidebar: React.FC<SidebarProps> = ({
         )}
       </div>
 
-      {/* Desktop version */}
       <div
         ref={sidebarRef}
         className={`bg-white shadow vh-100 p-3 position-fixed top-0 start-0 ${sidebarOpen ? 'd-block' : 'd-none'} d-xxl-block`}
@@ -164,9 +163,52 @@ const Sidebar: React.FC<SidebarProps> = ({
             </div>
           </Link>
         )}
+
+        
       </div>
     </>
+    
   );
 };
+ <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title" id="logoutModalLabel">
+                  Logout
+                </h5>
+              </div>
+              <div className="modal-body">
+                <p>Are you sure you want to log out?</p>
+              </div>
+              <div className="modal-footer">
+                <button
+                  className="btn btn-secondary"
+                  onClick={() => setShowLogoutModal(false)}
+                >
+                  Cancel
+                </button>
+                <button
+                  className="btn btn-danger"
+                  onClick={() => {
+                    setShowLogoutModal(false);
+                    onLogout();
+                  }}
+                >
+                  Logout
+                </button>
+                </div>
+                </div>
+                </div>
 
 export default Sidebar;
+
+
+
+function setShowLogoutModal(arg0: boolean): void {
+  throw new Error('Function not implemented.');
+}
+
+function onLogout() {
+  throw new Error('Function not implemented.');
+}
+

@@ -12,7 +12,6 @@ interface DeleteConfirmModalProps {
 }
 
 const DeleteConfirmModal: React.FC<DeleteConfirmModalProps> = ({ show, onClose, onConfirm }) => {
-
     return (
         <Modal show={show} onHide={onClose}>
             <Modal.Header closeButton>

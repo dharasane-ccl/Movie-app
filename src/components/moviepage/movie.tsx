@@ -98,19 +98,36 @@ const MovieViewPage: React.FC<MovieViewPageProps> = ({
         <div className="container my-5">
             {user && (
                 <div
-                    className="position-fixed top-0 end-0 m-2 mx-5 rounded-circle bg-success text-white d-flex justify-content-center align-items-center"
+                    className="position-fixed top-5 end-0 m-2 mx-5 rounded-circle bg-success text-white d-flex justify-content-center align-items-center"
                     style={{ width: "40px", height: "40px", fontSize: "18px", cursor: "pointer", zIndex: 1050 }}
                     onClick={() => setShowUserInfo(!showUserInfo)}
-                > {getDisplayName(user)?.charAt(0).toUpperCase()}
-                    {showUserInfo && (
-                        <div
-                            className="position-absolute bg-white shadow p-2 py-4 rounded end-0"
-                            style={{ top: "50px", minWidth: "40px", height: "110px", right: "0px", marginTop: '0px', marginBottom: '0px' }}
-                        >
-                            <div className="fw-bold py-1 mb-0 text-black " style={{ marginTop: '0px' }}>{getDisplayName(user)}</div>
+                >
+                     {getDisplayName(user)?.charAt(0).toUpperCase()}
 
+                    {showUserInfo && (
+                       <div
+                            className="position-absolute bg-white shadow p-2 py-4 rounded end-0"
+                            style={{ top: "50px", minWidth: "200px", zIndex: 1060 }}
+                        >
+                           
+                            <div className="fw-bold py-1 mb-0 text-black">
+                                {getDisplayName(user)}
+                                
+                            </div>
+                            {user?.employee_code && (
+                                <div className="text-secondary py-1 mb-0">
+                                    Emp. ID: {user.employee_code}
+                                    
+                                </div> 
+                            )}
+                            
+                            {user?.email && (
+                                <div className="text-secondary py-1 mb-0">
+                                    {user.email}
+                                </div>
+                            )}
                             <button
-                                className="btn btn-sm btn-link text-danger w-100 mt-0"
+                                className="btn btn-sm btn-link text-danger w-100 mt-2"
                                 onClick={onLogout}
                             >
                                 Logout
@@ -192,8 +209,10 @@ const MovieViewPage: React.FC<MovieViewPageProps> = ({
                     value={itemsperpage}
                     onChange={(e) => setItemsPerPage(Number(e.target.value))}
                     style={{ width: '67px' }}
+
                 >
-                    <option value="5">5 </option>
+                    <option value="6">6</option>
+                    <option value="5">5</option>
                     <option value="10">10</option>
                     <option value="50">50 </option>
                     <option value="100">100</option>

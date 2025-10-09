@@ -1,0 +1,30 @@
+// Your user icon dropdown JSX
+<div className="user-icon-container position-relative">
+    <div className="user-icon" onClick={() => setShowUserInfo(!showUserInfo)}>
+        {getDisplayName(user)?.charAt(0).toUpperCase()}
+    </div>
+    {showUserInfo && (
+        <div
+            className="position-absolute bg-white shadow p-2 py-4 rounded end-0"
+            style={{ top: "50px", minWidth: "200px", zIndex: 1060 }}
+        >
+            <div className="fw-bold py-1 mb-0 text-black">
+                {getDisplayName(user)}
+            </div>
+            {/* These lines are needed to display the information */}
+            {user?.employee_code && (
+                <div className="text-secondary py-1 mb-0">
+                    Emp. ID: {user.employee_code}
+                </div>
+            )}
+            {user?.email && (
+                <div className="text-secondary py-1 mb-0">
+                    {user.email}
+                </div>
+            )}
+            <button className="btn btn-sm btn-link text-danger w-100 mt-2" onClick={onLogout}>
+                Logout
+            </button>
+        </div>
+    )}
+</div>
