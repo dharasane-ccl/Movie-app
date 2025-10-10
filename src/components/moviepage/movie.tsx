@@ -69,7 +69,6 @@ const MovieViewPage: React.FC<MovieViewPageProps> = ({
     const handleItemsPerPageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setItemsPerPage(Number(e.target.value));
     };
-
     const paginationStatus = useMemo(() => {
         const totalFilteredItems = filteredLists.length;
         if (totalFilteredItems === 0) {
