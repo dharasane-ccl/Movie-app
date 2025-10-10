@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { User } from '../user/types';
 import { Link, useLocation } from 'react-router-dom';
 import "bootstrap-icons/font/bootstrap-icons.css";
@@ -9,11 +9,14 @@ interface SidebarProps {
   setSidebarOpen: (open: boolean) => void;
   currentUser: User | null;
 }
+
 const Sidebar: React.FC<SidebarProps> = ({
   sidebarOpen,
   setSidebarOpen,
   currentUser,
+  onLogout,
 }) => {
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
   const sidebarRef = useRef<HTMLDivElement>(null);
   const location = useLocation();
 
@@ -40,7 +43,7 @@ const Sidebar: React.FC<SidebarProps> = ({
     <>
       <Link
         to="/movie"
-        className={`nav-link text-black mb-2 my-3 p-3 no-focus-outline  ${location.pathname === '/movie' ? 'bg-success text-white' : 'bg-white'}`}
+        className={`nav-link text-black mb-2 my-3 p-3 no-focus-outline ${location.pathname === '/movie' ? 'bg-success text-white' : 'bg-white'}`}
         onClick={() => setSidebarOpen(false)}
       >
         <div className="d-flex align-items-center">
@@ -51,7 +54,7 @@ const Sidebar: React.FC<SidebarProps> = ({
 
       <Link
         to="/movie/favorites"
-        className={`nav-link text-black mb-2  p-3 no-focus-outline ${location.pathname === '/movie/favorites' ? 'bg-success text-white' : 'bg-white'}`}
+        className={`nav-link text-black mb-2 p-3 no-focus-outline ${location.pathname === '/movie/favorites' ? 'bg-success text-white' : 'bg-white'}`}
         onClick={() => setSidebarOpen(false)}
       >
         <div className="d-flex align-items-center">
@@ -64,31 +67,31 @@ const Sidebar: React.FC<SidebarProps> = ({
 
   return (
     <>
-      <nav className="navbar navbar-light d-xxl-none  bg-white">
-        <div className="container bg-white">
-          <button
-            className="btn btn-white border-rounded"
-            type="button"
-            onClick={() => setSidebarOpen(true)}
-            style={{
-              position: 'fixed',
-              zIndex: 1040,
-              top: '0px',
-              left: '0px',
-              backgroundColor: 'white',
-              paddingRight: '500px',
-              border: 'none',
-              fontSize: '20px',
-              color: 'black',
-            }}
-          >
-            ☰
-          </button>
-        </div>
-      </nav>
+      {!sidebarOpen && (
+        <button
+          className="btn btn-white border-rounded"
+          type="button"
+          onClick={() => setSidebarOpen(true)}
+          style={{
+            position: 'fixed',
+            zIndex: 1040,
+            top: '0px',
+            left: '10px',
+            backgroundColor: 'white',
+            paddingRight: '1900px',
+            height: '50px',
+            border: 'none',
+            fontSize: '20px',
+            color: 'black',
+          }}
+        >
+          ☰
+        </button>
+      )}
+
       {sidebarOpen && (
         <div
-          className="sidebar-backdrop d-xxl-none "
+          className="sidebar-backdrop d-xxl-none"
           onClick={() => setSidebarOpen(false)}
           style={{
             position: 'fixed',
@@ -101,54 +104,42 @@ const Sidebar: React.FC<SidebarProps> = ({
           }}
         />
       )}
-      <div
-        ref={sidebarRef}
-        className={`bg-white shadow vh-100 p-3 position-fixed top-0 start-0 ${sidebarOpen ? 'd-block' : 'd-none'} d-xxl-none`}
-        style={{
-          width: sidebarOpen ? '210px' : '0px',
-          height: '100%',
-          zIndex: 1030,
-          transition: 'transform 0.3s ease-in-out',
-          transform: sidebarOpen ? 'translateX(0)' : 'translateX(-100%)',
-        }}
-      >
-        <div className="d-flex align-items-center mb-4 mt-5 my-5" >
-          <img src="assets/logo.png" alt="Just Watch Logo" className="me-2" />
-          {sidebarOpen && <span className="fw-bold fs-4">Just Watch</span>}
-        </div>
-
-        {commonLinks}
-        {currentUser?.type === 1 && (
-          <Link
-            to="/admin"
-            className={`nav-link text-black mb-2 my-3 p-3 no-focus-outline ${location.pathname === '/admin' ? 'bg-success text-white' : 'bg-white'}`}
-            onClick={() => setSidebarOpen(false)}
-          >
-            <div className="d-flex align-items-center">
-              <i className="bi bi-film"></i>
-              {sidebarOpen && <span className="ms-3">Master Movies</span>}
-            </div>
-          </Link>
-        )}
-      </div>
 
       <div
         ref={sidebarRef}
         className={`bg-white shadow vh-100 p-3 position-fixed top-0 start-0 ${sidebarOpen ? 'd-block' : 'd-none'} d-xxl-block`}
         style={{
           width: sidebarOpen ? '210px' : '70px',
-          height: '100%',
           zIndex: 1030,
           transition: 'transform 0.3s ease-in-out',
           transform: sidebarOpen ? 'translateX(0)' : 'translateX(-10%)',
+          height: '100%',
+          display: 'flex',
+          flexDirection: 'column',
         }}
-        onClick={() => setSidebarOpen(true)}
       >
-        <div className="d-flex align-items-center mb-4">
-          <img src="assets/logo.png" alt="Just Watch Logo" className="me-2" />
+        {sidebarOpen && (
+          <button
+            className="btn btn-light btn-sm"
+            style={{
+              position: 'absolute',
+              top: 10,
+              right: 10,
+              zIndex: 1050,
+            }}
+            onClick={() => setSidebarOpen(false)}
+          >
+            ✕
+          </button>
+        )}
+
+       
+        <div className="d-flex align-items-center my-5">
+          <img src="assets/logo.png" alt="Just Watch Logo" className="me-2"></img>
           {sidebarOpen && <span className="fw-bold fs-4">Just Watch</span>}
         </div>
 
+        
         {commonLinks}
 
         {currentUser?.type === 1 && (
@@ -159,36 +150,44 @@ const Sidebar: React.FC<SidebarProps> = ({
           >
             <div className="d-flex align-items-center">
               <i className="bi bi-person-video2"></i>
-              {sidebarOpen && <span className="ms-3 ">Master Movies</span>}
+              {sidebarOpen && <span className="ms-3">Master Movies</span>}
             </div>
           </Link>
         )}
 
-        
+        <div className="mt-0">
+          <button
+            className="btn btn-danger w-100 my-4 bottom-0 fixed-bottom "
+            onClick={() => setShowLogoutModal(true)}
+          >
+            <i className="bi bi-box-arrow-right me-2 mb-0 bottom-0"></i>
+            {sidebarOpen && "Logout"}
+          </button>
+        </div>
       </div>
-    </>
-    
-  );
-};
- <div className="modal-dialog modal-dialog-centered">
+
+      {showLogoutModal && (
+        <div
+          className="modal fade show d-block"
+          tabIndex={-1}
+          role="dialog"
+          style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}
+        >
+          <div className="modal-dialog modal-dialog-centered " role="document">
             <div className="modal-content">
               <div className="modal-header">
-                <h5 className="modal-title" id="logoutModalLabel">
-                  Logout
-                </h5>
+                <h5 className="modal-title">Logout</h5>
               </div>
               <div className="modal-body">
                 <p>Are you sure you want to log out?</p>
               </div>
               <div className="modal-footer">
-                <button
-                  className="btn btn-secondary"
-                  onClick={() => setShowLogoutModal(false)}
-                >
+                <button className="btn btn-secondary" onClick={() => setShowLogoutModal(false)}>
                   Cancel
                 </button>
                 <button
-                  className="btn btn-danger"
+                  className="btn btn-danger mt-auto"
+
                   onClick={() => {
                     setShowLogoutModal(false);
                     onLogout();
@@ -196,19 +195,13 @@ const Sidebar: React.FC<SidebarProps> = ({
                 >
                   Logout
                 </button>
-                </div>
-                </div>
-                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+};
 
 export default Sidebar;
-
-
-
-function setShowLogoutModal(arg0: boolean): void {
-  throw new Error('Function not implemented.');
-}
-
-function onLogout() {
-  throw new Error('Function not implemented.');
-}
-

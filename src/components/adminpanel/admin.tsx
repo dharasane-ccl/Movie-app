@@ -40,7 +40,15 @@ const getDisplayName = (currentUser: User | null): string => {
 };
 
 const AdminPanel: React.FC = () => {
-    const [movies, setMovies] = useState<Movie[]>([]);
+    const [movies, setMovies] = useState<Movie[]>(() => {
+        try {
+            const savedMovies = localStorage.getItem('movies');
+            return savedMovies ? JSON.parse(savedMovies) : (Lists as Movie[]);
+        } catch (error) {
+            console.error("Failed to parse movies from local storage:", error);
+            return Lists as Movie[];
+        }
+    });
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [filterGenre, setFilterGenre] = useState<string>('All');
     const [editingMovie, setEditingMovie] = useState<Movie | null>(null);
@@ -57,6 +65,13 @@ const AdminPanel: React.FC = () => {
     const [editFormErrors, setEditFormErrors] = useState<MovieFormErrors | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
+    const [currentMovie, setCurrentMovie] = useState<Movie | null>(null);
+    const [isEditing] = useState(false);
+
+    useEffect(() => {
+        localStorage.setItem('movies', JSON.stringify(movies));
+    }, [movies]);
+
 
     const allGenres = useMemo(() => {
         return Array.from(new Set(movies.map(movie => movie.genre)));
@@ -94,24 +109,23 @@ const AdminPanel: React.FC = () => {
         }
     };
 
-    useEffect(() => {
-        const checkUserStatus = () => {
-            setIsLoading(true);
-            try {
-                const storedUser = localStorage.getItem('currentUser');
-                if (storedUser) {
-                    setUser(JSON.parse(storedUser));
-                }
-            } catch (error) {
-                console.error("Failed to parse user data from localStorage:", error);
-            } finally {
-                setIsLoading(false);
+    const checkUserStatus = () => {
+        setIsLoading(true);
+        try {
+            const storedUser = localStorage.getItem('currentUser');
+            if (storedUser) {
+                setUser(JSON.parse(storedUser));
             }
-        };
-        checkUserStatus();
-        setMovies(Lists as Movie[]);
-    }, []);
+        } catch (error) {
+            console.error("Failed to parse user data from localStorage:", error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
+    useEffect(() => {
+        checkUserStatus();
+    }, []);
     const filteredMovies = useMemo(() => {
         return movies.filter(movie => {
             const matchesSearch = movie.title.toLowerCase().includes(searchTerm.toLowerCase());
@@ -155,7 +169,6 @@ const AdminPanel: React.FC = () => {
         handleCloseAddModal();
         toast.success(`Movie "${newMovie.title}" added successfully!`, { position: "top-right", className: "bg-success text-white" });
     };
-
     const handleUpdate = () => {
         if (!editingMovie) return;
         const errors = validateMovie(editingMovie);
@@ -167,7 +180,6 @@ const AdminPanel: React.FC = () => {
         handleCloseEditModal();
         toast.success(`Movie "${editingMovie.title}" updated successfully!`, { position: "top-right", className: "bg-success text-white" });
     };
-
     const handleDelete = (deletingMovieId: string) => {
         if (!deletingMovieId) return;
 
@@ -178,7 +190,6 @@ const AdminPanel: React.FC = () => {
 
         toast.success(`Movie "${movieTitle}" deleted successfully.`, { position: "top-right", className: "bg-success text-white" });
     };
-
     const handleCloseAddModal = () => {
         setShowAddModal(false);
         setAddFormErrors(null);
@@ -203,6 +214,7 @@ const AdminPanel: React.FC = () => {
         setViewingMovie(null);
         setShowViewModal(false);
     };
+
     const handleOpenDeleteConfirmModal = (id: string) => {
         setDeletingMovieId(id);
         setShowDeleteConfirmModal(true);
@@ -212,55 +224,49 @@ const AdminPanel: React.FC = () => {
         setShowDeleteConfirmModal(false);
     };
 
-    const onLogout = () => {
-        localStorage.removeItem('isLoggedIn');
-        localStorage.removeItem('currentUser');
-        setUser(null);
-        setShowUserInfo(false);
-
-    };
     return (
         <div className="container mt-4">
             {isLoading ? (
-                <div className="position-fixed top-5 end-0 m-2 mx-5" style={{ zIndex: 1050 }}>
+                <div className="position-fixed top-0 my-0 end-0 m-2 mx-5" style={{ zIndex: 1050 }}>
                     Loading...
                 </div>
             ) : user ? (
                 <div
-                    className="position-fixed top-5 end-0 m-2 mx-5 rounded-circle bg-success text-white d-flex justify-content-center align-items-center"
+                    className="position-fixed top-0 end-0 m-2 mx-5 rounded-circle bg-success text-white d-flex justify-content-center align-items-center"
                     style={{ width: "40px", height: "40px", fontSize: "18px", cursor: "pointer", zIndex: 1050 }}
                     onClick={() => setShowUserInfo(!showUserInfo)}
                 >
-                     {getDisplayName(user)?.charAt(0).toUpperCase()}
+                    {getDisplayName(user)?.charAt(0).toUpperCase()}
 
                     {showUserInfo && (
                         <div
                             className="position-absolute bg-white shadow p-2 py-4 rounded end-0"
                             style={{ top: "50px", minWidth: "200px", zIndex: 1060 }}
                         >
-                           
+
                             <div className="fw-bold py-1 mb-0 text-black">
                                 {getDisplayName(user)}
-                                
+
                             </div>
                             {user?.employee_code && (
                                 <div className="text-secondary py-1 mb-0">
                                     Emp. ID: {user.employee_code}
-                                    
-                                </div> 
-                            )}
-                            
-                            {user?.email && (
-                                <div className="text-secondary py-1 mb-0">
-                                    {user.email}
+
                                 </div>
                             )}
-                            <button
-                                className="btn btn-sm btn-link text-danger w-100 mt-2"
-                                onClick={onLogout}
-                            >
-                                Logout
-                            </button>
+
+                            {user?.email && (
+                                <div>
+                                    <a
+                                        href={`https://mail.google.com/mail/u/0/?tab=rm&ogbl#inbox?compose=new}`}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        style={{ color: 'blue', textDecoration: 'underline' }}
+                                    >
+                                        {user.email}
+                                    </a>
+                                </div>
+                            )}
                         </div>
                     )}
                 </div>
@@ -268,19 +274,19 @@ const AdminPanel: React.FC = () => {
                 <div className="position-fixed top-5 end-0 m-2 mx-5" style={{ zIndex: 1050 }}>
                 </div>
             )}
-             
-            <h2 className="mb-4">Master Movies</h2>
+            <h2 className="mb-4 mx-2 my-5">Master Movies</h2>
             <Row className="mb-4 align-items-center" >
-                <Col md={4} className="mb-2 mb-md-0 px-5" style={{ marginLeft: '0px' }}>
+                <Col md={4} className="mb-2 mb-md-0 px-3" >
                     <input
                         type="text"
-                        className="form-control"
+                        className="form-control "
+                        style={{ marginRight: '10px' }}
                         placeholder="Search by title..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                     />
                 </Col>
-                <Col md={4} className="mb-2 mb-md-0 px-5" >
+                <Col md={4} className="mb-2 mb-md-0 px-3" >
                     <Select
                         options={genreOptions}
                         value={selectedGenreOption}
@@ -292,7 +298,8 @@ const AdminPanel: React.FC = () => {
                         }}
                     />
                 </Col>
-                <Col md={4} className="mb-2 mb-md-0 d-flex justify-content-md-end">
+
+                <Col md={4} className="mb-2 mb-md-0 d-flex justify-content-md-end ">
                     {user && (
                         <Button variant="primary" onClick={handleShowAddModal}>
                             Add New Movie

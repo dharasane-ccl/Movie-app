@@ -28,7 +28,7 @@ function App() {
   useEffect(() => {
     const favoriteIds = movies.filter((m) => m.isFavorite).map((m) => m._id);
     localStorage.setItem('favoriteMovies', JSON.stringify(favoriteIds));
-  }, [movies]);
+  }, [movies]); 
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -37,6 +37,7 @@ function App() {
     let wasFavorite: boolean = false;
 
     const movieToUpdate = movies.find(movie => movie._id === id);
+
 
     if (movieToUpdate) {
       movieTitle = movieToUpdate.title;
@@ -63,7 +64,7 @@ function App() {
     localStorage.removeItem('currentUser');
     setIsAuthenticated(false);
     setCurrentUser(null);
-    toast.success('You have been logged out successfully!', { position: "top-right" ,className: "bg-success text-white"});
+    toast.success('You have been logged out successfully!', { position: "top-right", className: "bg-success text-white" });
     navigate('/login', { replace: true });
   };
 
