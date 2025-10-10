@@ -65,10 +65,6 @@ const MovieViewPage: React.FC<MovieViewPageProps> = ({
     const handlePageChange = (pageNumber: number) => {
         setCurrentPage(pageNumber);
     };
-
-    const handleItemsPerPageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        setItemsPerPage(Number(e.target.value));
-    };
     const paginationStatus = useMemo(() => {
         const totalFilteredItems = filteredLists.length;
         if (totalFilteredItems === 0) {
@@ -119,7 +115,6 @@ const MovieViewPage: React.FC<MovieViewPageProps> = ({
                                 </div>
                             )}
                         </div>
-
                     )}
                 </div>
             )}
@@ -187,31 +182,26 @@ const MovieViewPage: React.FC<MovieViewPageProps> = ({
                     </Col>
                 )}
             </Row>
-                <div className="d-flex justify-content-end align-items-end ">
-                       <div className="d-flex align-items-center">
-                    <Form.Group as={Row} className="align-items-end my-0">
-                        <Form.Label column xs="auto" className="me-2 my-0 ">
-                            Rows per page:
-                        </Form.Label>
-                        <Col xs="auto" >
-                            <Form.Select value={itemsperpage} onChange={handleItemsPerPageChange}>
-                                {movielists.length > 0 ? (
-                                    [...Array(Math.min(movielists.length, 100)).keys()].filter(i => (i + 1) % 5=== 0).map(i => (
-                                        <option key={i + 1} value={i + 1}>{i + 1}</option>
-                                    ))
-                                ) : (
-                                    <option value={5}>5</option>
-                                )}
-                            </Form.Select>
-                        </Col>
-                    </Form.Group>
-                    </div>
-
-                    <div className="d-flex align-items-center">
-                        <span className="me-3 text-muted mx-2">{paginationStatus}
-                        </span>
-
-                         <Pagination className='lusdt' my-0 >
+            <div className="d-flex justify-content-end align-items-center mt-4">
+                <div className="d-flex align-items-center me-3">
+                    <Form.Label className="me-2 mb-0">
+                        Rows per page:
+                    </Form.Label>
+                    <Form.Select
+                        value={itemsperpage}
+                        onChange={(e) => setItemsPerPage(Number(e.target.value))}
+                        style={{ width: '80px' }}
+                    >
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                    </Form.Select>
+                </div>
+                <span className="me-3 text-muted">
+                    {paginationStatus}
+                </span>
+                <Pagination className='mb-0'>
                     <Pagination.Prev
                         onClick={() => handlePageChange(currentPage - 1)}
                         disabled={currentPage === 1}
@@ -227,10 +217,13 @@ const MovieViewPage: React.FC<MovieViewPageProps> = ({
                         <i className="bi bi-caret-right-fill" aria-hidden="true"></i>
                     </Pagination.Next>
                 </Pagination>
-                    </div>
-                </div>
+            </div>
 
         </div>
+
+
+
+
     );
 };
 
