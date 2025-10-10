@@ -180,6 +180,7 @@ const AdminPanel: React.FC = () => {
         handleCloseEditModal();
         toast.success(`Movie "${editingMovie.title}" updated successfully!`, { position: "top-right", className: "bg-success text-white" });
     };
+
     const handleDelete = (deletingMovieId: string) => {
         if (!deletingMovieId) return;
 

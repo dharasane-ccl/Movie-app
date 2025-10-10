@@ -20,7 +20,7 @@ const MovieTable: React.FC<MovieTableProps> = ({ movies, onEdit, onView, onDelet
       movie.title.toLowerCase().includes(filterTerm.toLowerCase())
     );
   }, [movies, filterTerm]);
-
+  
   const totalPages = useMemo(() => {
     return Math.ceil(filteredMovies.length / itemsPerPage);
   }, [filteredMovies, itemsPerPage]);
