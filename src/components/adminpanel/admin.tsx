@@ -223,7 +223,6 @@ const AdminPanel: React.FC = () => {
         setDeletingMovieId(null);
         setShowDeleteConfirmModal(false);
     };
-
     return (
         <div className="container mt-4">
             {isLoading ? (
