@@ -94,7 +94,6 @@ const AdminPanel: React.FC = () => {
         const { name, value } = e.target;
         let processedValue: string | number = value;
 
-
         if (name === 'year') {
             const sanitizedValue = value.replace(/[^0-9]/g, '');
             processedValue = sanitizedValue === '' ? '' : parseInt(sanitizedValue) || 0;
@@ -108,7 +107,6 @@ const AdminPanel: React.FC = () => {
             setNewMovie({ ...newMovie, [name]: processedValue });
         }
     };
-
     const checkUserStatus = () => {
         setIsLoading(true);
         try {

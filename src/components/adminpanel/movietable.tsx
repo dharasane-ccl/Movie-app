@@ -19,7 +19,7 @@ const MovieTable: React.FC<MovieTableProps> = ({ movies, onEdit, onView, onDelet
     return movies.filter(movie =>
       movie.title.toLowerCase().includes(filterTerm.toLowerCase())
     );
-  }, [movies, filterTerm]); 
+  }, [movies, filterTerm]);
 
   const totalPages = useMemo(() => {
     return Math.ceil(filteredMovies.length / itemsPerPage);
@@ -109,13 +109,10 @@ const MovieTable: React.FC<MovieTableProps> = ({ movies, onEdit, onView, onDelet
             </Form.Label>
             <Col xs="auto">
               <Form.Select value={itemsPerPage} onChange={handleItemsPerPageChange}>
-                {paginatedMovies.length > 0 ? (
-                  [...Array(Math.min(filteredMovies.length, 100)).keys()].filter(i => (i + 1) % 5 === 0).map(i => (
-                    <option key={i + 1} value={i + 1}>{i + 1}</option>
-                  ))
-                ) : (
-                  <option value={5}>5</option>
-                )}
+                <option value='5'>5</option>
+                <option value='10'>10</option>
+                <option value='50'>50</option>
+                <option value='100'>100</option>
               </Form.Select>
             </Col>
           </Form.Group>
