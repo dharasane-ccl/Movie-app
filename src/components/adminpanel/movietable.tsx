@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Movie } from './types';
-import { Button, Form, Pagination } from 'react-bootstrap';
+import { Button, Col, Form, Pagination, Row } from 'react-bootstrap';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
 interface MovieTableProps {
@@ -11,16 +11,15 @@ interface MovieTableProps {
 }
 
 const MovieTable: React.FC<MovieTableProps> = ({ movies, onEdit, onView, onDelete }) => {
-
-  const [itemsPerPage, setItemsPerPage] = useState(6)
+  const [itemsPerPage, setItemsPerPage] = useState(5);
   const [currentPage, setCurrentPage] = useState(1);
-  const [filterterm] = useState('')
+  const [filterTerm] = useState('');
 
   const filteredMovies = useMemo(() => {
     return movies.filter(movie =>
-      movie.title.toLowerCase().includes(filterterm.toLowerCase())
+      movie.title.toLowerCase().includes(filterTerm.toLowerCase())
     );
-  }, [movies]);
+  }, [movies, filterTerm]); 
 
   const totalPages = useMemo(() => {
     return Math.ceil(filteredMovies.length / itemsPerPage);
@@ -39,21 +38,24 @@ const MovieTable: React.FC<MovieTableProps> = ({ movies, onEdit, onView, onDelet
     }
     const indexOfFirstItem = (currentPage - 1) * itemsPerPage + 1;
     const indexOfLastItem = Math.min(currentPage * itemsPerPage, totalFilteredItems);
-
     return `${indexOfFirstItem}-${indexOfLastItem} of ${totalFilteredItems}`;
   }, [filteredMovies, currentPage, itemsPerPage]);
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [filterterm, itemsPerPage]);
+  }, [filterTerm, itemsPerPage]);
 
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
   };
 
+  const handleItemsPerPageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setItemsPerPage(Number(e.target.value));
+  };
+
   return (
-    <div className="table">
-      <table className="table align-middle table-xxl w-100 ">
+    <div className="table-container"> {/* Renamed for clarity */}
+      <table className="table align-middle table-xxl w-100">
         <thead>
           <tr>
             <th>S.No</th>
@@ -70,8 +72,7 @@ const MovieTable: React.FC<MovieTableProps> = ({ movies, onEdit, onView, onDelet
             <tr key={movie._id}>
               <td>{(currentPage - 1) * itemsPerPage + index + 1}</td>
               <td>{movie.title}</td>
-              <td>{movie.description}
-              </td>
+              <td>{movie.description}</td>
               <td>{movie.year}</td>
               <td>{movie.genre}</td>
               <td>
@@ -100,39 +101,46 @@ const MovieTable: React.FC<MovieTableProps> = ({ movies, onEdit, onView, onDelet
           ))}
         </tbody>
       </table>
-      <div className="d-flex justify-content-end">
-        <Form.Select
-          value={itemsPerPage}
-          onChange={(e) => setItemsPerPage(Number(e.target.value))}
-          style={{ width: '67px' }}
-        >
-          <option value="5">5</option>
-          <option value="10">10 </option>
-          <option value="50">50 </option>
-          <option value="100">100</option>
-        </Form.Select>
-        <span className="text-muted my-2 mx-5">
-          {paginationStatus}
-        </span>
-        <Pagination >
-          <Pagination.Prev
-            onClick={() => handlePageChange(currentPage - 1)}
-            disabled={currentPage === 1}
-            aria-label="Previous"
-          >
-            <i className="bi bi-caret-left-fill" aria-hidden="true"></i>
-          </Pagination.Prev>
-          <Pagination.Next
-            onClick={() => handlePageChange(currentPage + 1)}
-            disabled={currentPage === totalPages}
-            aria-label="Next"
-          >
-            <i className="bi bi-caret-right-fill" aria-hidden="true"></i>
-          </Pagination.Next>  
-        </Pagination>
-      </div>
+      {totalPages > 1 && (
+        <div className="d-flex justify-content-end align-items-end mt-4">
+          <Form.Group as={Row} className="align-items-center">
+            <Form.Label column xs="auto" className="me-2 mb-3">
+              Items per page:
+            </Form.Label>
+            <Col xs="auto">
+              <Form.Select value={itemsPerPage} onChange={handleItemsPerPageChange}>
+                {paginatedMovies.length > 0 ? (
+                  [...Array(Math.min(filteredMovies.length, 100)).keys()].filter(i => (i + 1) % 5 === 0).map(i => (
+                    <option key={i + 1} value={i + 1}>{i + 1}</option>
+                  ))
+                ) : (
+                  <option value={5}>5</option>
+                )}
+              </Form.Select>
+            </Col>
+          </Form.Group>
+          <div className="d-flex align-items-center">
+            <span className="me-3 text-muted">{paginationStatus}</span>
+            <Pagination className='lusdt' mb-3 >
+              <Pagination.Prev
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1}
+                aria-label='previous'
+              >
+                <i className="bi bi-caret-left-fill" aria-hidden="true"></i>
+              </Pagination.Prev>
+              <Pagination.Next
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage === totalPages}
+                aria-label='Next'
+              >
+                <i className="bi bi-caret-right-fill" aria-hidden="true"></i>
+              </Pagination.Next>
+            </Pagination>
+          </div>
+        </div>
+      )}
     </div>
-    
   );
 };
 export default MovieTable;

@@ -160,7 +160,71 @@ const Lists = [
     image: "/assets/m18.jpeg",
     genre: "crime",
     targetUrl: "https://youtu.be/p_2DXWte8bo?si=qdYS1NydXuj19R99"
-  }
+  },
+   {
+    _id: "19",
+    title: "Arrival",
+    year: 2016,
+    description: "A linguist is recruited by the military.",
+    image: "/assets/m17.jpeg",
+    genre: "war",
+    targetUrl: "https://youtu.be/p_2DXWte8bo?si=qdYS1NydXuj19R99"
+  },
+  {
+    _id: "20",
+    title: "Avengers",
+    year: 2008,
+    description: "Guilt-stricken after a job gone wrong,.",
+    image: "/assets/m18.jpeg",
+    genre: "cartoon",
+    targetUrl: "https://youtu.be/p_2DXWte8bo?si=qdYS1NydXuj19R99"
+  },
+   {
+    _id: "21",
+    title: "Family",
+    year: 2009,
+    description: "Guilt-stricken after a job gone wrong,.",
+    image: "/assets/m18.jpeg",
+    genre: "love",
+    targetUrl: "https://youtu.be/p_2DXWte8bo?si=qdYS1NydXuj19R99"
+  },
+   {
+    _id: "22",
+    title: " Bruges",
+    year: 2010,
+    description: "Guilt-stricken after a job gone wrong,.",
+    image: "/assets/m18.jpeg",
+    genre: "evil",
+    targetUrl: "https://youtu.be/p_2DXWte8bo?si=qdYS1NydXuj19R99"
+   },
+   {
+    _id: "23",
+    title: "cricket",
+    year: 2011,
+    description: "Guilt-stricken after a job gone wrong,.",
+    image: "/assets/m18.jpeg",
+    genre: "war",
+    targetUrl: "https://youtu.be/p_2DXWte8bo?si=qdYS1NydXuj19R99"
+  },
+   {
+    _id: "24",
+    title: " football",
+    year: 2016,
+    description: "Guilt-stricken after a job gone wrong,.",
+    image: "/assets/m18.jpeg",
+    genre: "superhero",
+    targetUrl: "https://youtu.be/p_2DXWte8bo?si=qdYS1NydXuj19R99"
+   },
+ {
+    _id: "25",
+    title: "the dog",
+    year: 2023,
+    description: "Guilt-stricken after a job gone wrong,.",
+    image: "/assets/m18.jpeg",
+    genre: "love",
+    targetUrl: "https://youtu.be/p_2DXWte8bo?si=qdYS1NydXuj19R99"
+  },
+  
 ];
 
 export default Lists;

@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import usersData from "./users.json";
 import { User } from './types';
-
 import { toast } from 'react-toastify';
 
 interface LoginPageProps {
@@ -87,18 +86,20 @@ const LoginPage: React.FC<LoginPageProps> = ({ setIsAuthenticated, setUser }) =>
         <h6 className='text-secondary text-center'>Please sign in to your account</h6>
         <form onSubmit={handleSubmit} noValidate>
           <div className='mb-3 mt-3 mx-5  text-start'>
-            <label>Email <span className="text-danger">*</span></label>
-            <input
-              className={`form-control ${errors.email ? 'is-invalid' : ''}`}
-              type="email"
-              value={email}
-              onChange={handleEmailChange}
-            />
+            <label htmlFor='emailInput'>Email <span className="text-danger">*</span></label>
+            <div style={{ maxWidth: '400px' }}>
+              <input
+                className={`form-control w-100 ${errors.email ? 'is-invalid' : ''}`}
+                type="email"
+                value={email}
+                onChange={handleEmailChange}
+              />
+            </div>
             {errors.email && <div className="invalid-feedback">{errors.email}</div>}
           </div>
           <div className='mb-3 mt-3 mx-5 text-start'>
-            <label>Password <span className="text-danger">*</span></label>
-            <div className="input-group">
+            <label htmlFor='passwordInput'>Password <span className="text-danger">*</span></label>
+            <div className="input-group" style={{ maxWidth: '400px' }}>
               <div className="input-group">
                 <input
                   className={`form-control  ${errors.password ? 'is-invalid' : ''}`}
@@ -117,10 +118,10 @@ const LoginPage: React.FC<LoginPageProps> = ({ setIsAuthenticated, setUser }) =>
                 {errors.password && <div className="invalid-feedback">{errors.password}</div>}
               </div>
             </div>
-            </div>
-            <div className='text-center'>
-              <button type="submit" className="btn btn-primary w-40 mt-3">Login</button>
-            </div>
+          </div>
+          <div className='text-center'>
+            <button type="submit" className="btn btn-primary w-40 mt-3">Login</button>
+          </div>
         </form>
       </div>
     </div>
