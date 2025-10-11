@@ -2,16 +2,17 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import Lists from '../moviepage/movie-list';
 import { Movie, User } from "./types";
-import { Button, Row, Col } from 'react-bootstrap';
+import { Button, Row, Col, Pagination } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
-import MovieTable from './movietable';
+import MovieTable from './Table/movietable';
 import AddEditMovieModal from './addedit';
 import ViewMovieModal from './viewmodal';
 import DeleteConfirmModal from './delete';
 import { title } from 'process';
 import Select from "react-select";
 import { toast } from 'react-toastify';
+import PaginationComponent from './Table/pagination';
 
 interface MovieFormErrors {
     user?: User;
@@ -64,12 +65,12 @@ const AdminPanel: React.FC = () => {
     const [addFormErrors, setAddFormErrors] = useState<MovieFormErrors | null>(null);
     const [editFormErrors, setEditFormErrors] = useState<MovieFormErrors | null>(null);
     const [isLoading, setIsLoading] = useState(true);
-    const [, setCurrentPage] = useState(1);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage, setItemsPerPage] = useState(5);
 
     useEffect(() => {
         localStorage.setItem('movies', JSON.stringify(movies));
     }, [movies]);
-
 
     const allGenres = useMemo(() => {
         return Array.from(new Set(movies.map(movie => movie.genre)));
@@ -88,7 +89,7 @@ const AdminPanel: React.FC = () => {
         setFilterGenre(option.value);
     };
 
-    function handleInputChange(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>): void {
+    const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>): void => {
         const { name, value } = e.target;
         let processedValue: string | number = value;
 
@@ -104,7 +105,47 @@ const AdminPanel: React.FC = () => {
         } else {
             setNewMovie({ ...newMovie, [name]: processedValue });
         }
-    };
+    }, [editingMovie, newMovie]);
+
+
+    const filteredMovies = useMemo(() => {
+        return movies.filter(movie => {
+            const matchesSearch = movie.title.toLowerCase().includes(searchTerm.toLowerCase());
+            const matchesGenre = filterGenre === 'All' || movie.genre === filterGenre;
+            return matchesSearch && matchesGenre;
+        });
+    }, [movies, searchTerm, filterGenre]);
+
+    const totalPages = useMemo(() => {
+        return Math.ceil(filteredMovies.length / itemsPerPage);
+    }, [filteredMovies, itemsPerPage]);
+
+    const paginatedMovies = useMemo(() => {
+        const indexOfLastItem = currentPage * itemsPerPage;
+        const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+        return filteredMovies.slice(indexOfFirstItem, indexOfLastItem);
+    }, [filteredMovies, currentPage, itemsPerPage]);
+
+    const paginationStatus = useMemo(() => {
+        const totalFilteredItems = filteredMovies.length;
+        if (totalFilteredItems === 0) {
+            return "0-0 of 0";
+        }
+
+        const indexOfFirstItem = (currentPage - 1) * itemsPerPage + 1;
+        const indexOfLastItem = Math.min(currentPage * itemsPerPage, totalFilteredItems);
+        return `${indexOfFirstItem}-${indexOfLastItem} of ${totalFilteredItems}`;
+    }, [filteredMovies, currentPage, itemsPerPage]);
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [searchTerm, filterGenre, itemsPerPage]);
+
+    // Handle page change from pagination component
+    const handlePageChange = useCallback((pageNumber: number) => {
+        setCurrentPage(pageNumber);
+    }, []);
+
+
     const checkUserStatus = () => {
         setIsLoading(true);
         try {
@@ -121,7 +162,7 @@ const AdminPanel: React.FC = () => {
     useEffect(() => {
         checkUserStatus();
     }, []);
-    const filteredMovies = useMemo(() => {
+    const filteredMovie = useMemo(() => {
         return movies.filter(movie => {
             const matchesSearch = movie.title.toLowerCase().includes(searchTerm.toLowerCase());
             const matchesGenre = filterGenre === 'All' || movie.genre === filterGenre;
@@ -146,7 +187,6 @@ const AdminPanel: React.FC = () => {
         if (movie.targetUrl && !/^(ftp|http|https):\/\/[^ "]+$/.test(movie.targetUrl)) errors.targetUrl = 'Invalid Target URL format.';
         return errors;
     }, []);
-
     const handleCreate = () => {
         const errors = validateMovie(newMovie);
         if (Object.keys(errors).length > 0) {
@@ -187,12 +227,14 @@ const AdminPanel: React.FC = () => {
 
         toast.success(`Movie "${movieTitle}" deleted successfully.`, { position: "top-right", className: "bg-success text-white" });
     };
+
     const handleCloseAddModal = () => {
         setShowAddModal(false);
         setAddFormErrors(null);
         setNewMovie(initialNewMovieState);
     };
     const handleShowAddModal = () => setShowAddModal(true);
+
     const handleOpenEditModal = (movie: Movie) => {
         setEditingMovie(movie);
         setEditFormErrors(null);
@@ -220,7 +262,6 @@ const AdminPanel: React.FC = () => {
         setDeletingMovieId(null);
         setShowDeleteConfirmModal(false);
     };
-
 
     return (
         <div className="container mt-4">
@@ -296,7 +337,6 @@ const AdminPanel: React.FC = () => {
                         }}
                     />
                 </Col>
-
                 <Col md={4} className="mb-2 mb-md-0 d-flex justify-content-md-end ">
                     {user && (
                         <Button variant="primary" onClick={handleShowAddModal}>
@@ -307,12 +347,22 @@ const AdminPanel: React.FC = () => {
             </Row>
             {user && (
                 <MovieTable
-                    movies={filteredMovies}
+                    movies={paginatedMovies}
                     onEdit={handleOpenEditModal}
-                    onDelete={handleOpenDeleteConfirmModal}
+                   onDelete={handleOpenDeleteConfirmModal}
                     onView={handleView}
+                    
                 />
             )}
+            <PaginationComponent
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+                paginationStatus={paginationStatus}
+                itemsPerPage={itemsPerPage}
+                setItemsPerPage={setItemsPerPage}
+            />
+
             <AddEditMovieModal
                 show={showAddModal || showEditModal}
                 isEditing={!!editingMovie}

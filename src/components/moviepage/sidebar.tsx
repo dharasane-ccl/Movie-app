@@ -20,6 +20,8 @@ const Sidebar: React.FC<SidebarProps> = ({
   const sidebarRef = useRef<HTMLDivElement>(null);
   const location = useLocation();
 
+  
+
   useEffect(() => {
     const handleOutsideClick = (event: MouseEvent) => {
       const navbarButton = document.querySelector('.btn-white');
@@ -38,6 +40,7 @@ const Sidebar: React.FC<SidebarProps> = ({
       document.removeEventListener('mousedown', handleOutsideClick);
     };
   }, [sidebarOpen, setSidebarOpen]);
+  
 
   const commonLinks = (
     <>

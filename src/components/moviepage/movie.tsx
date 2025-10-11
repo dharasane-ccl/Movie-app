@@ -33,6 +33,7 @@ const MovieViewPage: React.FC<MovieViewPageProps> = ({
     const [selectedGenre, setSelectedGenre] = useState('');
     const [searchTerm, setSearchTerm] = useState("");
     const [showUserInfo, setShowUserInfo] = useState(false);
+    
 
     const filteredLists = useMemo(() => {
         let lists = movielists;

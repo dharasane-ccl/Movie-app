@@ -17,6 +17,7 @@ const selectOptions = [
   }))
 ];
 
+
 const Search: React.FC<SessionSearchProps> = ({
   searchTerm,
   setSearchTerm,
