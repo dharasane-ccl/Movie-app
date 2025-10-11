@@ -181,6 +181,7 @@ const AdminPanel: React.FC = () => {
         toast.success(`Movie "${editingMovie.title}" updated successfully!`, { position: "top-right", className: "bg-success text-white" });
     };
 
+
     const handleDelete = (deletingMovieId: string) => {
         if (!deletingMovieId) return;
 

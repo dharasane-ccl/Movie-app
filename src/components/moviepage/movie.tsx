@@ -142,7 +142,8 @@ const MovieViewPage: React.FC<MovieViewPageProps> = ({
                                         alt={movie.title}
                                         style={{ height: '200px', objectFit: 'cover' }}
                                     />
-                                </a>
+                                    </a>
+                              
 
                                 <Card.Body className="d-flex flex-column position-relative">
                                     <h5 className="card-title">{movie.title}</h5>
