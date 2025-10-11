@@ -120,6 +120,29 @@ const MovieViewPage: React.FC<MovieViewPageProps> = ({
                             )}
                         </div>
 
+                            <div className="fw-bold py-1 mb-0 text-black">
+                                {getDisplayName(user)}
+
+                            </div>
+                            {user?.employee_code && (
+                                <div className="text-secondary py-1 mb-0">
+                                    Emp. ID: {user.employee_code}
+                                </div>
+                            )}
+
+                            {user?.email && (
+                                <div>
+                                    <a
+                                        href={`https://mail.google.com/mail/u/0/?tab=rm&ogbl#inbox?compose=new}`}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        style={{ color: 'blue', textDecoration: 'underline' }}
+                                    >
+                                        {user.email}
+                                    </a>
+                                </div>
+                            )}
+                        </div>
                     )}
                 </div>
             )}
@@ -147,7 +170,8 @@ const MovieViewPage: React.FC<MovieViewPageProps> = ({
                                         alt={movie.title}
                                         style={{ height: '200px', objectFit: 'cover' }}
                                     />
-                                </a>
+                                    </a>
+                              
 
                                 <Card.Body className="d-flex flex-column position-relative">
                                     <h5 className="card-title">{movie.title}</h5>
@@ -225,9 +249,48 @@ const MovieViewPage: React.FC<MovieViewPageProps> = ({
                         </Pagination.Next>
                     </Pagination>
                 </div>
+            <div className="d-flex justify-content-end align-items-center mt-4">
+                <div className="d-flex align-items-center me-3">
+                    <Form.Label className="me-2 mb-0">
+                        Rows per page:
+                    </Form.Label>
+                    <Form.Select
+                        value={itemsperpage}
+                        onChange={(e) => setItemsPerPage(Number(e.target.value))}
+                        style={{ width: '80px' }}
+                    >
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                    </Form.Select>
+                </div>
+                <span className="me-3 text-muted">
+                    {paginationStatus}
+                </span>
+                <Pagination className='mb-0'>
+                    <Pagination.Prev
+                        onClick={() => handlePageChange(currentPage - 1)}
+                        disabled={currentPage === 1}
+                        aria-label='previous'
+                    >
+                        <i className="bi bi-caret-left-fill" aria-hidden="true"></i>
+                    </Pagination.Prev>
+                    <Pagination.Next
+                        onClick={() => handlePageChange(currentPage + 1)}
+                        disabled={currentPage === totalPages}
+                        aria-label='Next'
+                    >
+                        <i className="bi bi-caret-right-fill" aria-hidden="true"></i>
+                    </Pagination.Next>
+                </Pagination>
             </div>
 
         </div>
+
+
+
+
     );
 };
 

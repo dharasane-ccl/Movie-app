@@ -7,7 +7,6 @@ interface DeleteConfirmModalProps {
     onDelete: () => void;
     onConfirm: () => void;
     movieTitle: string;
-
 }
 
 const DeleteConfirmModal: React.FC<DeleteConfirmModalProps> = ({ show, onClose, onConfirm }) => {

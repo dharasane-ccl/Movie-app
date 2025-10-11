@@ -128,4 +128,3 @@ const LoginPage: React.FC<LoginPageProps> = ({ setIsAuthenticated, setUser }) =>
   );
 };
 export default LoginPage;
-

@@ -65,6 +65,10 @@ const AdminPanel: React.FC = () => {
     const [editFormErrors, setEditFormErrors] = useState<MovieFormErrors | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [, setCurrentPage] = useState(1);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [currentMovie, setCurrentMovie] = useState<Movie | null>(null);
+    const [isEditing] = useState(false);
+
     useEffect(() => {
         localStorage.setItem('movies', JSON.stringify(movies));
     }, [movies]);
@@ -104,6 +108,20 @@ const AdminPanel: React.FC = () => {
             setNewMovie({ ...newMovie, [name]: processedValue });
         }
     };
+    const checkUserStatus = () => {
+        setIsLoading(true);
+        try {
+            const storedUser = localStorage.getItem('currentUser');
+            if (storedUser) {
+                setUser(JSON.parse(storedUser));
+            }
+        } catch (error) {
+            console.error("Failed to parse user data from localStorage:", error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
     const checkUserStatus = () => {
         setIsLoading(true);
         try {
@@ -175,6 +193,8 @@ const AdminPanel: React.FC = () => {
         handleCloseEditModal();
         toast.success(`Movie "${editingMovie.title}" updated successfully!`, { position: "top-right", className: "bg-success text-white" });
     };
+
+
     const handleDelete = (deletingMovieId: string) => {
         if (!deletingMovieId) return;
 
@@ -218,6 +238,8 @@ const AdminPanel: React.FC = () => {
         setDeletingMovieId(null);
         setShowDeleteConfirmModal(false);
     };
+
+
     return (
         <div className="container mt-4">
             {isLoading ? (

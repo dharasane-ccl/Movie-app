@@ -21,6 +21,7 @@ const MovieTable: React.FC<MovieTableProps> = ({ movies, onEdit, onView, onDelet
     );
   }, [movies, filterTerm]);
 
+  
   const totalPages = useMemo(() => {
     return Math.ceil(filteredMovies.length / itemsPerPage);
   }, [filteredMovies, itemsPerPage]);
@@ -55,6 +56,7 @@ const MovieTable: React.FC<MovieTableProps> = ({ movies, onEdit, onView, onDelet
 
   return (
     <div className="table-container"> {/* Renamed for clarity */}
+    <div className="table-container">
       <table className="table align-middle table-xxl w-100">
         <thead>
           <tr>
@@ -137,7 +139,44 @@ const MovieTable: React.FC<MovieTableProps> = ({ movies, onEdit, onView, onDelet
           </div>
         </div>
       )}
+      <div className="d-flex justify-content-end align-items-center mt-4">
+        <div className="d-flex align-items-center me-3">
+          <Form.Label className="me-2 mb-0">
+            Rows per page:
+          </Form.Label>
+          <Form.Select
+            value={itemsPerPage}
+            onChange={(e) => setItemsPerPage(Number(e.target.value))}
+            style={{ width: '80px' }}
+          >
+            <option value="5">5 </option>
+            <option value="10">10</option>
+            <option value="50">50 </option>
+            <option value="100">100</option>
+          </Form.Select>
+        </div>
+        <span className="me-3 text-muted">
+          {paginationStatus}
+        </span>
+        <Pagination className='mb-0'>
+          <Pagination.Prev
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+            aria-label='previous'
+          >
+            <i className="bi bi-caret-left-fill" aria-hidden="true"></i>
+          </Pagination.Prev>
+          <Pagination.Next
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === totalPages}
+            aria-label='Next'
+          >
+            <i className="bi bi-caret-right-fill" aria-hidden="true"></i>
+          </Pagination.Next>
+        </Pagination>
+      </div>
     </div>
+
   );
 };
 export default MovieTable;

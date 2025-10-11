@@ -141,7 +141,6 @@ const Sidebar: React.FC<SidebarProps> = ({
 
         
         {commonLinks}
-
         {currentUser?.type === 1 && (
           <Link
             to="/admin"
