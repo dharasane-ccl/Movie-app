@@ -208,7 +208,7 @@ const MovieViewPage: React.FC<MovieViewPageProps> = ({
                     <span className="me-3 text-muted mx-2">{paginationStatus}
                     </span>
 
-                    <Pagination className='lusdt' my-0 >
+                    <Pagination className='lusdt my-0 ' >
                         <Pagination.Prev
                             onClick={() => handlePageChange(currentPage - 1)}
                             disabled={currentPage === 1}

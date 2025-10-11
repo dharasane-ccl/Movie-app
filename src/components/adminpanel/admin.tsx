@@ -64,10 +64,7 @@ const AdminPanel: React.FC = () => {
     const [addFormErrors, setAddFormErrors] = useState<MovieFormErrors | null>(null);
     const [editFormErrors, setEditFormErrors] = useState<MovieFormErrors | null>(null);
     const [isLoading, setIsLoading] = useState(true);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [currentMovie, setCurrentMovie] = useState<Movie | null>(null);
-    const [isEditing] = useState(false);
-
+    const [, setCurrentPage] = useState(1);
     useEffect(() => {
         localStorage.setItem('movies', JSON.stringify(movies));
     }, [movies]);

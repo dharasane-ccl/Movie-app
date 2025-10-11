@@ -104,7 +104,7 @@ const MovieTable: React.FC<MovieTableProps> = ({ movies, onEdit, onView, onDelet
       {totalPages > 1 && (
         <div className="d-flex justify-content-end align-items-end mt-4">
           <Form.Group as={Row} className="align-items-center">
-            <Form.Label column xs="auto" className="me-2 mb-3">
+            <Form.Label column xs="auto" className="me-2 my-0">
               Items per page:
             </Form.Label>
             <Col xs="auto">
@@ -118,7 +118,7 @@ const MovieTable: React.FC<MovieTableProps> = ({ movies, onEdit, onView, onDelet
           </Form.Group>
           <div className="d-flex align-items-center">
             <span className="me-3 text-muted">{paginationStatus}</span>
-            <Pagination className='lusdt' mb-3 >
+            <Pagination className='lusdt my-0'  >
               <Pagination.Prev
                 onClick={() => handlePageChange(currentPage - 1)}
                 disabled={currentPage === 1}

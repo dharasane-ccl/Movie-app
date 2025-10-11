@@ -1,7 +1,6 @@
 import React from 'react';
 import { Modal, Button } from 'react-bootstrap';
 
-
 interface DeleteConfirmModalProps {
     show: boolean;
     onClose: () => void;
