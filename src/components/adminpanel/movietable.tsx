@@ -20,6 +20,7 @@ const MovieTable: React.FC<MovieTableProps> = ({ movies, onEdit, onView, onDelet
       movie.title.toLowerCase().includes(filterTerm.toLowerCase())
     );
   }, [movies, filterTerm]);
+
   
   const totalPages = useMemo(() => {
     return Math.ceil(filteredMovies.length / itemsPerPage);
@@ -49,7 +50,12 @@ const MovieTable: React.FC<MovieTableProps> = ({ movies, onEdit, onView, onDelet
     setCurrentPage(pageNumber);
   };
 
+  const handleItemsPerPageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setItemsPerPage(Number(e.target.value));
+  };
+
   return (
+    <div className="table-container"> {/* Renamed for clarity */}
     <div className="table-container">
       <table className="table align-middle table-xxl w-100">
         <thead>
@@ -97,6 +103,42 @@ const MovieTable: React.FC<MovieTableProps> = ({ movies, onEdit, onView, onDelet
           ))}
         </tbody>
       </table>
+      {totalPages > 1 && (
+        <div className="d-flex justify-content-end align-items-end mt-4">
+          <Form.Group as={Row} className="align-items-center">
+            <Form.Label column xs="auto" className="me-2 my-0">
+              Items per page:
+            </Form.Label>
+            <Col xs="auto">
+              <Form.Select value={itemsPerPage} onChange={handleItemsPerPageChange}>
+                <option value='5'>5</option>
+                <option value='10'>10</option>
+                <option value='50'>50</option>
+                <option value='100'>100</option>
+              </Form.Select>
+            </Col>
+          </Form.Group>
+          <div className="d-flex align-items-center">
+            <span className="me-3 text-muted">{paginationStatus}</span>
+            <Pagination className='lusdt my-0'  >
+              <Pagination.Prev
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1}
+                aria-label='previous'
+              >
+                <i className="bi bi-caret-left-fill" aria-hidden="true"></i>
+              </Pagination.Prev>
+              <Pagination.Next
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage === totalPages}
+                aria-label='Next'
+              >
+                <i className="bi bi-caret-right-fill" aria-hidden="true"></i>
+              </Pagination.Next>
+            </Pagination>
+          </div>
+        </div>
+      )}
       <div className="d-flex justify-content-end align-items-center mt-4">
         <div className="d-flex align-items-center me-3">
           <Form.Label className="me-2 mb-0">

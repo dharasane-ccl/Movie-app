@@ -179,6 +179,49 @@ const Lists = [
     genre: "cartoon",
     targetUrl: "https://youtu.be/p_2DXWte8bo?si=qdYS1NydXuj19R99"
   },
+   {
+    _id: "21",
+    title: "Family",
+    year: 2009,
+    description: "Guilt-stricken after a job gone wrong,.",
+    image: "/assets/m18.jpeg",
+    genre: "love",
+    targetUrl: "https://youtu.be/p_2DXWte8bo?si=qdYS1NydXuj19R99"
+  },
+   {
+    _id: "22",
+    title: " Bruges",
+    year: 2010,
+    description: "Guilt-stricken after a job gone wrong,.",
+    image: "/assets/m18.jpeg",
+    genre: "evil",
+    targetUrl: "https://youtu.be/p_2DXWte8bo?si=qdYS1NydXuj19R99"
+   },
+   {
+    _id: "23",
+    title: "cricket",
+    year: 2011,
+    description: "Guilt-stricken after a job gone wrong,.",
+    image: "/assets/m18.jpeg",
+    genre: "war",
+    targetUrl: "https://youtu.be/p_2DXWte8bo?si=qdYS1NydXuj19R99"
+  },
+   {
+    _id: "24",
+    title: " football",
+    year: 2016,
+    description: "Guilt-stricken after a job gone wrong,.",
+    image: "/assets/m18.jpeg",
+    genre: "superhero",
+    targetUrl: "https://youtu.be/p_2DXWte8bo?si=qdYS1NydXuj19R99"
+   },
+ {
+    _id: "25",
+    title: "the dog",
+    year: 2023,
+    description: "Guilt-stricken after a job gone wrong,.",
+    image: "/assets/m18.jpeg",
+    genre: "love",
   {
     _id: "15",
     title: "The Conjuring",

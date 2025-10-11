@@ -65,6 +65,10 @@ const MovieViewPage: React.FC<MovieViewPageProps> = ({
     const handlePageChange = (pageNumber: number) => {
         setCurrentPage(pageNumber);
     };
+
+    const handleItemsPerPageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        setItemsPerPage(Number(e.target.value));
+    };
     const paginationStatus = useMemo(() => {
         const totalFilteredItems = filteredLists.length;
         if (totalFilteredItems === 0) {
@@ -91,6 +95,30 @@ const MovieViewPage: React.FC<MovieViewPageProps> = ({
                             className="position-absolute bg-white shadow p-2 py-4 rounded end-0"
                             style={{ top: "50px", minWidth: "200px", zIndex: 1060 }}
                         >
+
+                            <div className="fw-bold py-1 mb-0 text-black">
+                                {getDisplayName(user)}
+
+                            </div>
+                            {user?.employee_code && (
+                                <div className="text-secondary py-1 mb-0">
+                                    Emp. ID: {user.employee_code}
+                                </div>
+                            )}
+
+                            {user?.email && (
+                                <div>
+                                    <a
+                                        href={`https://mail.google.com/mail/u/0/?tab=rm&ogbl#inbox?compose=new}`}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        style={{ color: 'blue', textDecoration: 'underline' }}
+                                    >
+                                        {user.email}
+                                    </a>
+                                </div>
+                            )}
+                        </div>
 
                             <div className="fw-bold py-1 mb-0 text-black">
                                 {getDisplayName(user)}
@@ -183,6 +211,44 @@ const MovieViewPage: React.FC<MovieViewPageProps> = ({
                     </Col>
                 )}
             </Row>
+            <div className="d-flex justify-content-end align-items-end ">
+                <div className="d-flex align-items-center">
+                    <Form.Group as={Row} className="align-items-end my-0">
+                        <Form.Label column xs="auto" className="me-2 my-0 ">
+                            Rows per page:
+                        </Form.Label>
+                        <Col xs="auto" >
+                            <Form.Select value={itemsperpage} onChange={handleItemsPerPageChange}>
+                                <option value='5'>5</option>
+                                <option value='10'>10</option>
+                                <option value='50'>50</option>
+                                <option value='100'>100</option>
+                            </Form.Select>
+                        </Col>
+                    </Form.Group>
+                </div>
+
+                <div className="d-flex align-items-center">
+                    <span className="me-3 text-muted mx-2">{paginationStatus}
+                    </span>
+
+                    <Pagination className='lusdt my-0 ' >
+                        <Pagination.Prev
+                            onClick={() => handlePageChange(currentPage - 1)}
+                            disabled={currentPage === 1}
+                            aria-label='previous'
+                        >
+                            <i className="bi bi-caret-left-fill" aria-hidden="true"></i>
+                        </Pagination.Prev>
+                        <Pagination.Next
+                            onClick={() => handlePageChange(currentPage + 1)}
+                            disabled={currentPage === totalPages}
+                            aria-label='Next'
+                        >
+                            <i className="bi bi-caret-right-fill" aria-hidden="true"></i>
+                        </Pagination.Next>
+                    </Pagination>
+                </div>
             <div className="d-flex justify-content-end align-items-center mt-4">
                 <div className="d-flex align-items-center me-3">
                     <Form.Label className="me-2 mb-0">

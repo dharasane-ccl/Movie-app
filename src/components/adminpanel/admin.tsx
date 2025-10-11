@@ -64,6 +64,7 @@ const AdminPanel: React.FC = () => {
     const [addFormErrors, setAddFormErrors] = useState<MovieFormErrors | null>(null);
     const [editFormErrors, setEditFormErrors] = useState<MovieFormErrors | null>(null);
     const [isLoading, setIsLoading] = useState(true);
+    const [, setCurrentPage] = useState(1);
     const [currentPage, setCurrentPage] = useState(1);
     const [currentMovie, setCurrentMovie] = useState<Movie | null>(null);
     const [isEditing] = useState(false);
@@ -94,7 +95,6 @@ const AdminPanel: React.FC = () => {
         const { name, value } = e.target;
         let processedValue: string | number = value;
 
-
         if (name === 'year') {
             const sanitizedValue = value.replace(/[^0-9]/g, '');
             processedValue = sanitizedValue === '' ? '' : parseInt(sanitizedValue) || 0;
@@ -106,6 +106,19 @@ const AdminPanel: React.FC = () => {
             setEditingMovie({ ...editingMovie, [name]: processedValue });
         } else {
             setNewMovie({ ...newMovie, [name]: processedValue });
+        }
+    };
+    const checkUserStatus = () => {
+        setIsLoading(true);
+        try {
+            const storedUser = localStorage.getItem('currentUser');
+            if (storedUser) {
+                setUser(JSON.parse(storedUser));
+            }
+        } catch (error) {
+            console.error("Failed to parse user data from localStorage:", error);
+        } finally {
+            setIsLoading(false);
         }
     };
 
