@@ -214,69 +214,7 @@ const Lists = [
     image: "/assets/m18.jpeg",
     genre: "superhero",
     targetUrl: "https://youtu.be/p_2DXWte8bo?si=qdYS1NydXuj19R99"
-   },
- {
-    _id: "25",
-    title: "the dog",
-    year: 2023,
-    description: "Guilt-stricken after a job gone wrong,.",
-    image: "/assets/m18.jpeg",
-    genre: "love",
-  {
-    _id: "15",
-    title: "The Conjuring",
-    year: 2013,
-    description: "Paranormal investigators Ed .",
-    image: "/assets/m15.jpeg",
-    genre: "evil",
-    targetUrl: "https://youtu.be/p_2DXWte8bo?si=qdYS1NydXuj19R99"
-  },
-  {
-    _id: "16",
-    title: "Before Sunrise",
-    year: 1995,
-    description: "A young man and woman.",
-    image: "/assets/m16.jpeg",
-    genre: "musical",
-    targetUrl: "https://youtu.be/p_2DXWte8bo?si=qdYS1NydXuj19R99"
-  },
-  {
-    _id: "17",
-    title: "Arrival",
-    year: 2016,
-    description: "A linguist is recruited by the military.",
-    image: "/assets/m17.jpeg",
-    genre: "war",
-    targetUrl: "https://youtu.be/p_2DXWte8bo?si=qdYS1NydXuj19R99"
-  },
-  {
-    _id: "18",
-    title: "In Bruges",
-    year: 2008,
-    description: "Guilt-stricken after a job gone wrong,.",
-    image: "/assets/m18.jpeg",
-    genre: "crime",
-    targetUrl: "https://youtu.be/p_2DXWte8bo?si=qdYS1NydXuj19R99"
-  },
-   {
-    _id: "19",
-    title: "Arrival",
-    year: 2016,
-    description: "A linguist is recruited by the military.",
-    image: "/assets/m17.jpeg",
-    genre: "war",
-    targetUrl: "https://youtu.be/p_2DXWte8bo?si=qdYS1NydXuj19R99"
-  },
-  {
-    _id: "20",
-    title: "Avengers",
-    year: 2008,
-    description: "Guilt-stricken after a job gone wrong,.",
-    image: "/assets/m18.jpeg",
-    genre: "cartoon",
-    targetUrl: "https://youtu.be/p_2DXWte8bo?si=qdYS1NydXuj19R99"
-  },
-  
+   }, 
 ];
 
 export default Lists;

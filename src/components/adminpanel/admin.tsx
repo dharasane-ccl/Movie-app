@@ -65,9 +65,6 @@ const AdminPanel: React.FC = () => {
     const [editFormErrors, setEditFormErrors] = useState<MovieFormErrors | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [, setCurrentPage] = useState(1);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [currentMovie, setCurrentMovie] = useState<Movie | null>(null);
-    const [isEditing] = useState(false);
 
     useEffect(() => {
         localStorage.setItem('movies', JSON.stringify(movies));
@@ -121,21 +118,6 @@ const AdminPanel: React.FC = () => {
             setIsLoading(false);
         }
     };
-
-    const checkUserStatus = () => {
-        setIsLoading(true);
-        try {
-            const storedUser = localStorage.getItem('currentUser');
-            if (storedUser) {
-                setUser(JSON.parse(storedUser));
-            }
-        } catch (error) {
-            console.error("Failed to parse user data from localStorage:", error);
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
     useEffect(() => {
         checkUserStatus();
     }, []);

@@ -14,6 +14,7 @@ interface MovieViewPageProps {
     pageTitle: string;
     genre?: string
 }
+
 const getDisplayName = (user: User | null): string => {
     if (!user) return "";
     const name = [user.first_name, user.last_name].filter(Boolean).join(" ").trim();
@@ -50,6 +51,7 @@ const MovieViewPage: React.FC<MovieViewPageProps> = ({
         return lists;
     }, [movielists, searchTerm, selectedGenre]);
 
+
     const currentItems = useMemo(() => {
         const indexOfLastItem = currentPage * itemsperpage;
         const indexOfFirstItem = indexOfLastItem - itemsperpage;
@@ -64,10 +66,6 @@ const MovieViewPage: React.FC<MovieViewPageProps> = ({
 
     const handlePageChange = (pageNumber: number) => {
         setCurrentPage(pageNumber);
-    };
-
-    const handleItemsPerPageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        setItemsPerPage(Number(e.target.value));
     };
     const paginationStatus = useMemo(() => {
         const totalFilteredItems = filteredLists.length;
@@ -89,51 +87,23 @@ const MovieViewPage: React.FC<MovieViewPageProps> = ({
                     onClick={() => setShowUserInfo(!showUserInfo)}
                 >
                     {getDisplayName(user)?.charAt(0).toUpperCase()}
-
                     {showUserInfo && (
                         <div
                             className="position-absolute bg-white shadow p-2 py-4 rounded end-0"
                             style={{ top: "50px", minWidth: "200px", zIndex: 1060 }}
                         >
-
                             <div className="fw-bold py-1 mb-0 text-black">
                                 {getDisplayName(user)}
-
                             </div>
                             {user?.employee_code && (
                                 <div className="text-secondary py-1 mb-0">
                                     Emp. ID: {user.employee_code}
                                 </div>
                             )}
-
                             {user?.email && (
                                 <div>
                                     <a
-                                        href={`https://mail.google.com/mail/u/0/?tab=rm&ogbl#inbox?compose=new}`}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        style={{ color: 'blue', textDecoration: 'underline' }}
-                                    >
-                                        {user.email}
-                                    </a>
-                                </div>
-                            )}
-                        </div>
-
-                            <div className="fw-bold py-1 mb-0 text-black">
-                                {getDisplayName(user)}
-
-                            </div>
-                            {user?.employee_code && (
-                                <div className="text-secondary py-1 mb-0">
-                                    Emp. ID: {user.employee_code}
-                                </div>
-                            )}
-
-                            {user?.email && (
-                                <div>
-                                    <a
-                                        href={`https://mail.google.com/mail/u/0/?tab=rm&ogbl#inbox?compose=new}`}
+                                        href={`https://mail.google.com/mail/u/0/?tab=rm&ogbl#inbox?compose=new`}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         style={{ color: 'blue', textDecoration: 'underline' }}
@@ -146,14 +116,14 @@ const MovieViewPage: React.FC<MovieViewPageProps> = ({
                     )}
                 </div>
             )}
-            <h1 className='mx-3 '>{heading}</h1>
+
+            <h1 className='mx-3'>{heading}</h1>
             <Search
                 searchTerm={searchTerm}
                 setSearchTerm={setSearchTerm}
                 selectedGenre={selectedGenre}
                 setSelectedGenre={setSelectedGenre}
             />
-
             <Row className="mt-3">
                 {currentItems.length > 0 ? (
                     currentItems.map((movie) => (
@@ -170,24 +140,20 @@ const MovieViewPage: React.FC<MovieViewPageProps> = ({
                                         alt={movie.title}
                                         style={{ height: '200px', objectFit: 'cover' }}
                                     />
-                                    </a>
-                              
-
+                                </a>
                                 <Card.Body className="d-flex flex-column position-relative">
                                     <h5 className="card-title">{movie.title}</h5>
                                     <h6 className="card-subtitle mb-2 text-muted">{movie.genre}</h6>
                                     <h6 className="card-year">{movie.year}</h6>
                                     <p className="card-text text-truncate flex-grow-1">{movie.description}</p>
-
                                     <button
                                         className="position-absolute top-0 end-0 m-2"
                                         onClick={(e) => {
                                             e.preventDefault();
                                             e.stopPropagation();
-                                            onToggleFavorite(movie._id)
-
+                                            onToggleFavorite(movie._id);
                                         }}
-                                        style={{
+                                       style={{
                                             background: 'none',
                                             border: 'none',
                                             cursor: 'pointer',
@@ -206,50 +172,12 @@ const MovieViewPage: React.FC<MovieViewPageProps> = ({
                         </Col>
                     ))
                 ) : (
-                    <Col>
-                        <p>No movies found matching your criteria.</p>
+                    <Col className="text-center">
+                        <p>No movies to display.</p>
                     </Col>
                 )}
             </Row>
-            <div className="d-flex justify-content-end align-items-end ">
-                <div className="d-flex align-items-center">
-                    <Form.Group as={Row} className="align-items-end my-0">
-                        <Form.Label column xs="auto" className="me-2 my-0 ">
-                            Rows per page:
-                        </Form.Label>
-                        <Col xs="auto" >
-                            <Form.Select value={itemsperpage} onChange={handleItemsPerPageChange}>
-                                <option value='5'>5</option>
-                                <option value='10'>10</option>
-                                <option value='50'>50</option>
-                                <option value='100'>100</option>
-                            </Form.Select>
-                        </Col>
-                    </Form.Group>
-                </div>
-
-                <div className="d-flex align-items-center">
-                    <span className="me-3 text-muted mx-2">{paginationStatus}
-                    </span>
-
-                    <Pagination className='lusdt my-0 ' >
-                        <Pagination.Prev
-                            onClick={() => handlePageChange(currentPage - 1)}
-                            disabled={currentPage === 1}
-                            aria-label='previous'
-                        >
-                            <i className="bi bi-caret-left-fill" aria-hidden="true"></i>
-                        </Pagination.Prev>
-                        <Pagination.Next
-                            onClick={() => handlePageChange(currentPage + 1)}
-                            disabled={currentPage === totalPages}
-                            aria-label='Next'
-                        >
-                            <i className="bi bi-caret-right-fill" aria-hidden="true"></i>
-                        </Pagination.Next>
-                    </Pagination>
-                </div>
-            <div className="d-flex justify-content-end align-items-center mt-4">
+              <div className="d-flex justify-content-end align-items-center mt-4">
                 <div className="d-flex align-items-center me-3">
                     <Form.Label className="me-2 mb-0">
                         Rows per page:
@@ -286,12 +214,10 @@ const MovieViewPage: React.FC<MovieViewPageProps> = ({
                 </Pagination>
             </div>
 
+           
         </div>
-
-
-
-
     );
+
 };
 
 export default MovieViewPage;

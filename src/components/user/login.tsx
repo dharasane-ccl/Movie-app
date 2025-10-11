@@ -94,9 +94,10 @@ const LoginPage: React.FC<LoginPageProps> = ({ setIsAuthenticated, setUser }) =>
                 value={email}
                 onChange={handleEmailChange}
               />
-            </div>
+         
             {errors.email && <div className="invalid-feedback">{errors.email}</div>}
           </div>
+             </div>
           <div className='mb-3 mt-3 mx-5 text-start'>
             <label htmlFor='passwordInput'>Password <span className="text-danger">*</span></label>
             <div className="input-group" style={{ maxWidth: '400px' }}>
