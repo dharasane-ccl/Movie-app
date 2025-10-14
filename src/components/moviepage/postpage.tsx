@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Card } from 'react-bootstrap';
+import { render } from '@testing-library/react';
 
 const PostPage: React.FC = () => {
   const [posts, setPosts] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await axios.get<any[]>(`/posts.json`);
+        const response = await axios.get<any[]>(`/https://jsonplaceholder.typicode.com/posts`);
         setPosts(response.data as any[]);
       } catch (err) {
         setError('Error loading posts');

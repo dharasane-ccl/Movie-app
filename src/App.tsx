@@ -12,8 +12,12 @@ import PostPage from './components/moviepage/postpage';
 
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => localStorage.getItem('isLoggedIn') === 'true');
-  const [currentUser, setCurrentUser] = useState<User | null>(() => {
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
+    const saved = localStorage.getItem('isLoggedIn');
+    return saved ? JSON.parse(saved) : false;
+  });
+
+  const [user, setUser] = useState<User | null>(() => {
     const saved = localStorage.getItem('currentUser');
     return saved ? JSON.parse(saved) : null;
   });
@@ -32,6 +36,13 @@ function App() {
     localStorage.setItem('favoriteMovies', JSON.stringify(favoriteIds));
   }, [movies]);
 
+  useEffect(() => {
+    const loggedIn = localStorage.getItem('isLoggedIn');
+    if (loggedIn) {
+      setIsAuthenticated(true);
+    }
+  }, []);
+
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const handleToggleFavorite = (id: string) => {
@@ -39,7 +50,6 @@ function App() {
     let wasFavorite: boolean = false;
 
     const movieToUpdate = movies.find(movie => movie._id === id);
-
 
     if (movieToUpdate) {
       movieTitle = movieToUpdate.title;
@@ -65,10 +75,11 @@ function App() {
     localStorage.removeItem('isLoggedIn');
     localStorage.removeItem('currentUser');
     setIsAuthenticated(false);
-    setCurrentUser(null);
+    setUser(null);
     toast.success('You have been logged out successfully!', { position: "top-right", className: "bg-success text-white" });
     navigate('/login', { replace: true });
   };
+ 
   return (
     <Routes>
       <Route path="/" element={isAuthenticated ? <Navigate to="/movie" /> : <Navigate to="/login" />} />
@@ -78,20 +89,21 @@ function App() {
           isAuthenticated ? (
             <Navigate to="/movie" replace />
           ) : (
-            <LoginPage setIsAuthenticated={setIsAuthenticated} setUser={setCurrentUser} />
+            // Pass the correct setUser function from useState
+            <LoginPage setIsAuthenticated={setIsAuthenticated} setUser={setUser} />
           )
         }
       />
       <Route
         path="/movie"
         element={
-          isAuthenticated && currentUser ? (
+          isAuthenticated && user ? ( // Use the correct state variable `user`
             <>
               <Sidebar
                 onLogout={handleLogout}
                 sidebarOpen={sidebarOpen}
                 setSidebarOpen={setSidebarOpen}
-                currentUser={currentUser}
+                currentUser={user} // Use `user` instead of `currentUser`
               />
               {sidebarOpen && (
                 <div
@@ -109,7 +121,7 @@ function App() {
               )}
               <div style={{ marginLeft: sidebarOpen ? '210px' : '0', transition: 'margin-left 0.3s ease' }}>
                 <MovieViewPage
-                  user={currentUser}
+                  user={user}
                   movielists={movies}
                   favoriteMovies={movies.filter((m) => m.isFavorite)}
                   onToggleFavorite={handleToggleFavorite}
@@ -126,17 +138,17 @@ function App() {
       <Route
         path="/movie/favorites"
         element={
-          isAuthenticated && currentUser ? (
+          isAuthenticated && user ? (
             <>
               <Sidebar
                 onLogout={handleLogout}
                 sidebarOpen={sidebarOpen}
                 setSidebarOpen={setSidebarOpen}
-                currentUser={currentUser}
+                currentUser={user}
               />
               <div style={{ marginLeft: sidebarOpen ? '210px' : '0', transition: 'margin-left 0.3s ease' }}>
                 <MovieViewPage
-                  user={currentUser}
+                  user={user}
                   movielists={movies.filter((m) => m.isFavorite)}
                   favoriteMovies={movies.filter((m) => m.isFavorite)}
                   onToggleFavorite={handleToggleFavorite}
@@ -154,13 +166,13 @@ function App() {
       <Route
         path="/posts"
         element={
-          isAuthenticated && currentUser ? (
+          isAuthenticated && user ? (
             <>
               <Sidebar
                 onLogout={handleLogout}
                 sidebarOpen={sidebarOpen}
                 setSidebarOpen={setSidebarOpen}
-                currentUser={currentUser}
+                currentUser={user}
               />
               <div style={{ marginLeft: sidebarOpen ? '210px' : '0', transition: 'margin-left 0.3s ease' }}>
                 <PostPage />
@@ -174,13 +186,13 @@ function App() {
       <Route
         path="/admin"
         element={
-          isAuthenticated && currentUser?.type === 1 ? (
+          isAuthenticated && user?.id === 1 ? (
             <>
               <Sidebar
                 onLogout={handleLogout}
                 sidebarOpen={sidebarOpen}
                 setSidebarOpen={setSidebarOpen}
-                currentUser={currentUser}
+                currentUser={user}
               />
               {sidebarOpen && (
                 <div
@@ -196,18 +208,20 @@ function App() {
                   }}
                 />
               )}
-              <div style={{ marginLeft: sidebarOpen ? '210px' : '0', transition: 'margin-left 0.3s ease' }}>
+              <div style={{ marginLeft: sidebarOpen ? '210px' : '0' }}>
                 <AdminPanel />
               </div>
             </>
           ) : (
-            <Navigate to="/login" />
+            <Navigate to="/movie" />
           )
         }
       />
+
     </Routes>
   );
 }
+
 const AppWithRouter = () => (
   <BrowserRouter>
     <App />

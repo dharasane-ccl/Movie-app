@@ -164,7 +164,7 @@ const Sidebar: React.FC<SidebarProps> = ({
 
 
         {commonLinks}
-        {currentUser?.type === 1 && (
+        {currentUser?.id === 1 && (
           <Link
             to="/admin"
             className={`nav-link text-black mb-2 my-3 p-3 no-focus-outline ${location.pathname === '/admin' ? 'bg-success text-white' : 'bg-white'}`}

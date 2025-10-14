@@ -20,8 +20,7 @@ const MovieTable: React.FC<MovieTableProps> = ({ movies, onEdit, onView, onDelet
     );
   }, [movies, filterTerm]);
 
-  useEffect(() => {
-  }, [filterTerm]);
+  
 
   const movieheaders = ["S.No", 'Title', "Description", "Year", "Genre", "Movie Url", "Actions"]
   return (

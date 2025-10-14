@@ -161,7 +161,7 @@ const AdminPanel: React.FC = () => {
     useEffect(() => {
         checkUserStatus();
     }, []);
-    const filteredMovie = useMemo(() => {
+    useMemo(() => {
         return movies.filter(movie => {
             const matchesSearch = movie.title.toLowerCase().includes(searchTerm.toLowerCase());
             const matchesGenre = filterGenre === 'All' || movie.genre === filterGenre;

@@ -18,7 +18,7 @@ const PaginationComponent = ({
     itemsPerPage, 
     setItemsPerPage,
 }: PaginationProps) => {
-    const pageNumbers = [...Array(totalPages).keys()].map(num => num + 1);
+    
 
     return (
         <div className="d-flex justify-content-end align-items-center mt-4">
