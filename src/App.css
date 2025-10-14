@@ -1,0 +1,137 @@
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import { v4 as uuidv4 } from 'uuid';
+import Lists from '../moviepage/movie-list';
+import { Movie, User } from "./types";
+import { Button, Row, Col, Form } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap-icons/font/bootstrap-icons.css';
+import MovieTable from './Table/movietable'; // Assuming this is your common table
+import AddEditMovieModal from './addedit';
+import ViewMovieModal from './viewmodal';
+import DeleteConfirmModal from './delete';
+import Select from "react-select";
+import { toast } from 'react-toastify';
+import PaginationComponent from './Table/pagination'; // Renamed to avoid confusion
+
+// ... (existing imports and interfaces)
+
+const AdminPanel: React.FC = () => {
+    // ... (existing state and useEffect hooks)
+    const [movies, setMovies] = useState<Movie[]>(() => {
+        try {
+            const savedMovies = localStorage.getItem('movies');
+            return savedMovies ? JSON.parse(savedMovies) : (Lists as Movie[]);
+        } catch (error) {
+            console.error("Failed to parse movies from local storage:", error);
+            return Lists as Movie[];
+        }
+    });
+    const [searchTerm, setSearchTerm] = useState<string>('');
+    const [filterGenre, setFilterGenre] = useState<string>('All');
+    const [editingMovie, setEditingMovie] = useState<Movie | null>(null);
+    const [deletingMovieId, setDeletingMovieId] = useState<string | null>(null);
+    const [newMovie, setNewMovie] = useState<Movie>(initialNewMovieState);
+    const [showAddModal, setShowAddModal] = useState<boolean>(false);
+    const [showEditModal, setShowEditModal] = useState<boolean>(false);
+    const [showViewModal, setShowViewModal] = useState<boolean>(false);
+    const [showDeleteConfirmModal, setShowDeleteConfirmModal] = useState<boolean>(false);
+    const [viewingMovie, setViewingMovie] = useState<Movie | null>(null);
+    const [showUserInfo, setShowUserInfo] = useState(false);
+    const [user, setUser] = useState<User | null>(null);
+    const [addFormErrors, setAddFormErrors] = useState<MovieFormErrors | null>(null);
+    const [editFormErrors, setEditFormErrors] = useState<MovieFormErrors | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
+    
+    // Pagination state and logic moved to parent
+    const [itemsPerPage, setItemsPerPage] = useState(5);
+    const [currentPage, setCurrentPage] = useState(1);
+
+    // ... (existing logic)
+
+    useEffect(() => {
+        localStorage.setItem('movies', JSON.stringify(movies));
+    }, [movies]);
+
+    // ... (existing genre logic and handlers)
+
+    const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>): void => {
+      // ... (existing logic)
+    }, [editingMovie, newMovie]);
+
+    const filteredMovies = useMemo(() => {
+        return movies.filter(movie => {
+            const matchesSearch = movie.title.toLowerCase().includes(searchTerm.toLowerCase());
+            const matchesGenre = filterGenre === 'All' || movie.genre === filterGenre;
+            return matchesSearch && matchesGenre;
+        });
+    }, [movies, searchTerm, filterGenre]);
+
+    // Calculate total pages based on the filtered movie list
+    const totalPages = useMemo(() => {
+      return Math.ceil(filteredMovies.length / itemsPerPage);
+    }, [filteredMovies, itemsPerPage]);
+
+    // Slice the movies for the current page
+    const paginatedMovies = useMemo(() => {
+      const indexOfLastItem = currentPage * itemsPerPage;
+      const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+      return filteredMovies.slice(indexOfFirstItem, indexOfLastItem);
+    }, [filteredMovies, currentPage, itemsPerPage]);
+
+    const paginationStatus = useMemo(() => {
+      const totalFilteredItems = filteredMovies.length;
+      if (totalFilteredItems === 0) {
+          return "0-0 of 0";
+      }
+
+      const indexOfFirstItem = (currentPage - 1) * itemsPerPage + 1;
+      const indexOfLastItem = Math.min(currentPage * itemsPerPage, totalFilteredItems);
+      return `${indexOfFirstItem}-${indexOfLastItem} of ${totalFilteredItems}`;
+    }, [filteredMovies, currentPage, itemsPerPage]);
+
+    // Reset current page when filters or items per page change
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [searchTerm, filterGenre, itemsPerPage]);
+
+    // Handle page change from pagination component
+    const handlePageChange = useCallback((pageNumber: number) => {
+      setCurrentPage(pageNumber);
+    }, []);
+
+    // ... (rest of the component logic)
+
+    return (
+        <div>
+            {/* ... (Your other components like Add/Edit/View/Delete Modals) */}
+
+            {/* Your table component */}
+            <MovieTable movies={paginatedMovies} />
+
+            {/* Pagination Controls */}
+            <div className="d-flex justify-content-between align-items-center mt-4">
+                <div className="d-flex align-items-center me-3">
+                    <Form.Label className="me-2 mb-0">Rows per page:</Form.Label>
+                    <Form.Select
+                        value={itemsPerPage}
+                        onChange={(e) => setItemsPerPage(Number(e.target.value))}
+                        style={{ width: '80px' }}
+                    >
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+                        <option value="50">50</option>
+                    </Form.Select>
+                </div>
+                
+                <PaginationComponent
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={handlePageChange}
+                    paginationStatus={paginationStatus}
+                />
+            </div>
+        </div>
+    );
+}
+
+export default AdminPanel;
